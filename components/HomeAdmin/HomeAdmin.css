@@ -1,0 +1,247 @@
+/* Start: Content */
+.admin__content {
+  position: relative;
+  width: calc(100% - 280px);
+  height: 100vh;
+  left: 280px;
+  top: 64px;
+  background-color: #eee;
+  transition: all 0.5s;
+}
+
+.admin__content--header {
+  position: fixed;
+  top: 0;
+  left: 280px;
+  right: 0;
+  background-color: #fff;
+  height: 64px;
+  color: #fff;
+  padding: 0 20px;
+  z-index: 10;
+  display: flex;
+  transition: all 0.5s;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.dashboard__wrapper {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  display: none;
+}
+
+/* .admin__content--header::before {
+  position: absolute;
+  content: '';
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  bottom: 0px;
+  right: 0px;
+  box-shadow: 10px 12px 0 #eee;
+}
+
+.admin__content--header::after {
+  content: '';
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  bottom: -40px;
+  left: 0;
+  border-radius: 50%;
+  box-shadow: -20px -20px 0 #fff;
+} */
+
+.admin__content--header__cate {
+  color: #333;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 40px;
+  cursor: pointer;
+}
+
+.admin__content--header__cate i {
+  margin-right: 15px;
+}
+
+.admin__content--header__user {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+.admin__content--header__user span {
+  color: #333;
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+.admin__content--header__user p {
+  background-color: #eee;
+  color: #333;
+  padding: 10px;
+  font-weight: bold;
+  border-radius: 5px;
+}
+
+.admin__content--header__user p i {
+  margin-right: 10px;
+}
+
+.admin__content--header h1 {
+  text-align: center;
+  line-height: 64px;
+  position: relative;
+}
+/* CSS for larger screens */
+.dashboard-section {
+  display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    padding: 20px;
+    gap: 20px;
+}
+
+.statisticDashboard {
+  padding-top: 20px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.box {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 20px;
+  border-radius: 10px;
+  width: calc(33.33% - 20px);
+  text-align: center;
+  transition: transform 0.2s;
+}
+
+.box-4 {
+  width: calc(25% - 20px)!important;
+}
+
+.box:hover {
+  transform: scale(1.05);
+  border: 1px solid #333;
+}
+
+.box h3 {
+  font-size: 18px;
+  margin: 10px 0;
+}
+
+.box p {
+  font-size: 22px;
+  font-weight: bold;
+  color: #fab000;
+  margin: 5px 0;
+}
+
+.box a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.box a:hover {
+  text-decoration: underline;
+}
+
+.box-4--wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.box-4--wrapper h3 {
+  margin-right: 5px;
+}
+
+/* CSS for smaller screens (e.g., tablets and mobile devices) */
+@media (max-width: 768px) {
+  .dashboard-section {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .box {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+}
+/* End: Content */
+
+/* Start :Modal thống kê */
+.modal_statistic {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  height: 80%;
+  width: 50%;
+  border-radius: 5px;
+  overflow: auto;
+  background-color: #fff;
+  display: none;
+  z-index: 11;
+}
+
+.modal_statistic.active {
+  display: block;
+}
+
+.modal_table {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.table_head {
+  background-color: #333;
+  color: #fff;
+  height: 40px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.modal_table tr,
+.modal_table td {
+  border: 1px solid #333;
+}
+
+.modal_table th,
+.modal_table td {
+  padding: 8px;
+  text-align: left;
+}
+
+.table_img {
+  width: 150px;
+}
+
+.table_img img {
+  border-radius: 4px;
+  width: 100%;
+  object-fit: contain;
+}
+
+.table-exit-btn {
+  float: right;
+  margin: 10px;
+  padding: 5px;
+}
+
+.box-4 button {
+  cursor: pointer;
+  padding: 5px;
+}
