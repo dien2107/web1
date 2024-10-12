@@ -13,7 +13,6 @@ const userLocal = JSON.parse(localStorage.getItem('User'));
 const toast = document.querySelectorAll('.toast');
 const toastContainer = document.querySelector('.toast-container');
 const toastAddCart = document.querySelector('.toast-add-cart');
-// localStorage.setItem('Carts', JSON.stringify(carts))
 const navItemCart = document.getElementById('nav-item-cart');
 const statusSearch = document.getElementById('statusSearch');
 const paging = document.getElementById('pagination');
@@ -74,7 +73,6 @@ function clickAddCart(id) {
     id: id.textContent,
     quantity: quantity
   };
-  // alert(quantity);
   let found = false;
   if (userLocal.cart.length > 0) {
     for (let i = 0; i < userLocal.cart.length; i++) {
@@ -90,7 +88,6 @@ function clickAddCart(id) {
     quantity = 1;
   }
   userLocal.createCartAt.push(processAt);
-  // alert("Ngày " + ngay + "/" + thang + "/" + nam + " lúc " + gio + ":" + phut + ":" + giay)
   localStorage.setItem('User', JSON.stringify(userLocal));
   const itemCart = document.createElement('p');
   itemCart.classList.add('item-cart');
@@ -155,8 +152,6 @@ function displayItem(startIndex, endIndex, data) {
   productList.innerHTML = '';
   for (let i = startIndex; i < endIndex; i++) {
     if (data[i].imgSrc !== undefined && data[i].name !== undefined && data[i].price !== undefined) {
-      let colors = data[i].dataColors;
-      let checkLike = true;
       let productItem = document.createElement('div');
       productItem.classList.add('product-item');
       productItem.innerHTML = `
@@ -186,8 +181,6 @@ function displayItem(startIndex, endIndex, data) {
                     `;
       productList.appendChild(productItem);
       handleOverlayProduct(productItem);
-      const id = productItem.querySelector('.id');
-      const like = productItem.querySelector('#like');
       handleBtnClick(productItem);
     } else {
       return;
@@ -229,7 +222,7 @@ selectButton.forEach(e => {
     const minPrice = parseInt(minInput.value);
     const maxPrice = parseInt(maxInput.value);
     const filteredProducts = data.filter(product => {
-      const price = parseInt(product.price.replace(/\D/g, '')); // Lấy giá và bỏ đi ký tự không phải là số
+      const price = parseInt(product.price.replace(/\D/g, '')); 
       return price >= minPrice && price <= maxPrice;
     });
     if (filteredProducts.length > 0) {
@@ -248,7 +241,6 @@ function filteredProducts() {
   const confirmButton = document.getElementById('filter-confirm-button');
   const types = document.getElementById('types');
 
-  // let price = '';
   dropdownMenu.querySelectorAll('input').forEach(element => {
     element.addEventListener('click', () => {
       dropdownMenu.querySelectorAll('input').forEach(otherElement => {
@@ -275,7 +267,6 @@ function sidebarFilteredProducts() {
   const dropdownMenu = document.getElementById('sidebar-dropdown-menu');
   const types = document.getElementById('sidebar-type');
 
-  // let price = '';  
   dropdownMenu.querySelectorAll('input').forEach(element => {
     element.addEventListener('click', () => {
       dropdownMenu.querySelectorAll('input').forEach(otherElement => {
@@ -549,7 +540,6 @@ function generatePagination(data) {
     });
     pagination.appendChild(pageLink);
   }
-  // Nút Next
   var nextBtn = document.createElement('a');
   nextBtn.href = 'javascript:void(0);';
   nextBtn.innerHTML = '&raquo;';
