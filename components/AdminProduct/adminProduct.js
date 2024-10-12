@@ -722,7 +722,6 @@ cancel.addEventListener('click', e => {
   loadData(data);
 });
 
-// page
 
 var totalPages = Math.ceil(filteredData.length / 10);
 var currentPage = 1;
@@ -765,7 +764,6 @@ function generatePagination(data) {
     });
 
     pagination.appendChild(pageLink);
-    // console.log(pageLink);
   }
 
   const nextBtn = document.createElement('a');
@@ -797,13 +795,10 @@ function loadData(data) {
 generatePagination(data);
 loadData(data);
 
-// filter
 const manageProduct = document.getElementById('manageProduct');
 const formFilter = manageProduct.querySelector('#product-filter-form');
 const filterSubmitBtn = formFilter.querySelector('#filter-submit-btn');
-// console.log(filterSubmitBtn);
 
-//  let dataFilter = data;
 filterSubmitBtn.addEventListener('click', e => {
   e.preventDefault();
 
@@ -814,9 +809,6 @@ filterSubmitBtn.addEventListener('click', e => {
   const dateSelect = manageProduct.querySelector('#cateDateSelect');
   const dateFrom = manageProduct.querySelector('#dateFrom input');
   const dateTo = manageProduct.querySelector('#dateTo input');
-
-  // Kiểm tra xem nếu người dùng chọn ngày (dateFrom/dateTo)
-  // mà chưa chọn loại ngày thì hiển thị thông báo
   if (
     !productName.value &&
     !productCode.value &&
@@ -829,8 +821,6 @@ filterSubmitBtn.addEventListener('click', e => {
   }
 
   let dataFilter = [...data];
-
-  // lọc theo ngày tháng năm
   if (dateFrom.value || dateTo.value || dateSelect.value !== '') {
     if ((dateFrom.value || dateTo.value) && !dateSelect.value) {
       alert('Vui lòng chọn dữ kiện loại ngày cần lọc!');
@@ -847,8 +837,6 @@ filterSubmitBtn.addEventListener('click', e => {
 
     const selectedDateFrom = new Date(dateFrom.value);
     const selectedDateTo = new Date(dateTo.value);
-
-    // Kiểm tra ngày bắt đầu nhỏ hơn ngày kết thúc
     if (selectedDateFrom <= selectedDateTo) {
       dataFilter = dataFilter.filter(product => {
         const dateCreateProduct = new Date(product.dateCreate);
@@ -874,21 +862,13 @@ filterSubmitBtn.addEventListener('click', e => {
       return;
     }
   }
-
-  //end lọc theo ngày tháng năm
-
-  // Lọc theo tên sản phẩm
   if (productName.value.trim()) {
     dataFilter = dataFilter.filter(e => e.name.toLowerCase().includes(productName.value.trim().toLowerCase()));
   }
-
-  // Lọc theo id sản phẩm
-
   if (productCode.value.trim()) {
     dataFilter = dataFilter.filter(e => e.ID.includes(productCode.value));
   }
 
-  // Lọc theo phân loại
   if (categorySelect.value != 'all') {
     dataFilter = dataFilter.filter(e => e.type === categorySelect.value);
   }
@@ -932,8 +912,6 @@ filterSubmitBtn.addEventListener('click', e => {
   }
   alert('Lọc thành công sản phẩm!');
 });
-
-// Reset
 const resetBtn = document.querySelector('.product--reset__btn');
 resetBtn.addEventListener('click', () => {
   productName.value = '';
@@ -943,24 +921,18 @@ resetBtn.addEventListener('click', () => {
   generatePagination(filteredData);
   loadData(data);
 });
-
-// Tự động return lại trang product page khi sửa hay xóa sp
 const autoReturnProductPageWhenReload = () => {
   const taskbarItems = document.querySelectorAll('.admin__taskbar--body__list li');
   const contentElements = document.querySelectorAll('.admin__content');
 
-  // Ẩn đi hết trạng thái active bên thanh sidebar
   taskbarItems.forEach(item => {
     item.classList.remove('active');
   });
 
-  // Ẩn đi hết nội dụng phần content
   contentElements.forEach(content => {
     content.classList.add('hideItem');
   });
 
-  // Hiện nội dung trang product
-  // Bật trạng thái active cho product bên sidebar
   document.querySelector('.admin__taskbar--body__list #product').classList.add('active');
   productContent.classList.remove('hideItem');
 };
