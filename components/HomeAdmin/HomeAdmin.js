@@ -1,7 +1,6 @@
 const DUMMY_API = JSON.parse(localStorage.getItem('DUMMY_API'));
 const DUMMY_PRODUCTS = JSON.parse(localStorage.getItem('DUMMY_PRODUCTS'));
 
-// Hàm đếm số lượng sản phẩm theo loại
 const countProductsByType = (products, targetType) => {
   return products.filter(product => product.type === targetType).length;
 };

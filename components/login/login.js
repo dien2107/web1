@@ -1,5 +1,4 @@
 let isLoggedIn = false;
-// ============================= Start: SHOW FORM REG/LOG
 const userBtn = document.querySelector('.header__bottom--extention-user');
 const overlay = document.querySelector('.overlay');
 const userWrapper = document.querySelector('.user__wrapper');
@@ -17,15 +16,11 @@ userBtn.addEventListener('click', e => {
   openFormRegister();
 });
 
-//Click btn at section4
 const section4Btn = document.querySelector('.section--4 button');
 section4Btn.addEventListener('click', e => {
   openFormRegister();
 });
-// ============================= End: SHOW FORM REG/LOG
 
-// ============================= Start: Switch mode reg/log
-//Change to login
 const signinBtn = document.querySelector('.register__background button');
 
 signinBtn.addEventListener('click', e => {
@@ -33,7 +28,6 @@ signinBtn.addEventListener('click', e => {
   userWrapper.classList.remove('register__active');
 });
 
-//Change to login when on low device
 const signinBtnOnLowDevice = document.querySelector('.signin button');
 const registerAgainOnLowDevice = document.querySelector('.register__again button');
 
@@ -47,23 +41,19 @@ registerAgainOnLowDevice.addEventListener('click', e => {
   userWrapper.classList.add('register__active');
 });
 
-//Change to register when show login form
 const registerAgain = document.querySelector('.login__background button');
 registerAgain.addEventListener('click', e => {
   userWrapper.classList.add('register__active');
   userWrapper.classList.remove('login__active');
 });
 
-// Open form reg/login on low device by hide menu
 const userIconHideMenu = document.querySelector('.hide__menu--list__extention .header__bottom--extention-user');
 const hideMenu = document.querySelector('.hide__menu');
 
 userIconHideMenu.addEventListener('click', e => {
   openFormRegister();
 });
-// ============================= end: Switch mode reg/log
 
-// ============================= Start: HIDE FORM
 const hideFormRegLogin = () => {
   userWrapper.style.animation = `fade 0.5s ease-in`;
   setTimeout(() => {
@@ -79,14 +69,11 @@ overlay.addEventListener('click', e => {
   hideFormRegLogin();
 });
 
-// Close form by button
 const btnCloseGlobal = document.querySelector('.user__wrapper .form__close--global');
 btnCloseGlobal.addEventListener('click', e => {
   hideFormRegLogin();
 });
-// ============================= End: HIDE FORM
 
-// =========================== start: LOGIC FOR REGISTER ===========================
 const accounts = [
   {
     id: 'admin',
@@ -188,8 +175,6 @@ registerSubmitBtn.addEventListener('click', e => {
     localStorage.setItem('accounts', JSON.stringify(accounts));
 
     const isHasDummyAPI = JSON.parse(localStorage.getItem('DUMMY_API'));
-    // Nếu chưa có dữ liệu DUMMY API thì chỉ cần
-    // tạo mới hoàn toàn dựa trên accounts
     if (!isHasDummyAPI) {
       accounts.forEach(account => {
         DUMMY_API.push({
@@ -198,9 +183,7 @@ registerSubmitBtn.addEventListener('click', e => {
         });
       });
     } else {
-      // Nếu đã có dữ liệu DUMMY API thì chỉ cần thêm mới
       DUMMY_API = isHasDummyAPI;
-      // console.log(DUMMY_API);
       accounts.forEach(account => {
         const isExistUserCart = DUMMY_API.find(userCart => account.id === userCart.idUser);
         if (!isExistUserCart) {
@@ -239,8 +222,6 @@ registerSubmitBtn.addEventListener('click', e => {
 const getData = () => {
   const dataFromLocalStorage = JSON.parse(localStorage.getItem('accounts'));
 
-  // Khởi tạo 2 mảng: uniqueID sẽ thêm id không trùng vào,
-  // còn filterData sẽ thêm data theo những id trong mảng uniqueID
   const uniqueId = [];
   const filteredData = [];
 
@@ -260,9 +241,7 @@ const getData = () => {
 };
 
 getData();
-// =========================== end: LOGIC FOR REGISTER ===========================
 
-// =========================== start: LOGIC FOR REGISTER ===========================
 const loginSubmitBtn = document.querySelector('.login__info--submit');
 const loginEmailInput = document.querySelector('.login__info--input-email');
 const loginPasswordInput = document.querySelector('.login__info--input-password');
@@ -309,7 +288,6 @@ loginSubmitBtn.addEventListener('click', e => {
     if (findAccount) {
       if (findAccount.password === password) {
         localStorage.setItem('User', JSON.stringify(findAccount));
-        // showPopup();
 
         const isHasDummyAPI = JSON.parse(localStorage.getItem('DUMMY_API'));
         if (!isHasDummyAPI) {
@@ -337,9 +315,7 @@ loginSubmitBtn.addEventListener('click', e => {
   }
 });
 
-// =========================== end: LOGIC FOR REGISTER ===========================
 
-// =========================== start: IF LOGGEDIN ===========================
 const welcomeUser = document.querySelector('.user-welcome');
 const userName = welcomeUser.querySelector('p:last-child');
 const userList = document.querySelector('.header__bottom--user__list');
@@ -371,7 +347,6 @@ const checkLoggedIn = () => {
 
     section4.style.display = 'none';
 
-    // FOR ACOUNT BTN ON HIDE MENU
     userIconHideMenu.classList.add('active-down');
     userIconHideMenu.addEventListener('click', e => {
       userListOnLowDevice.classList.toggle('active__onHideMenu');
@@ -379,7 +354,6 @@ const checkLoggedIn = () => {
       userIconHideMenu.classList.toggle('active-up');
     });
 
-    // Kiểm tra quyền truy cập User nếu là admin thì hiển thị btn Quản lý
     if (userLogin.isAdmin) {
       document.querySelectorAll('.adminManager__item').forEach(item => (item.style.display = 'block'));
     }
@@ -392,9 +366,7 @@ const checkLoggedIn = () => {
 };
 
 checkLoggedIn();
-// =========================== end: IF LOGGEDIN ===========================
 
-// =========================== start: LOGOUT LOGIC ===========================
 const logoutBtn = document.querySelector('.logout');
 const logoutLowDeviceBtn = document.querySelector('.hide__menu--list__type.logout__item');
 
@@ -407,9 +379,7 @@ const logoutHandler = () => {
 logoutLowDeviceBtn.addEventListener('click', logoutHandler);
 
 logoutBtn.addEventListener('click', logoutHandler);
-// =========================== end: LOGOUT LOGIC ===========================
 
-// =========================== start: GO TO ADMIN PAGE ===========================
 const manageBtn = document.querySelector('.adminManager');
 const manageLowDeviceBtn = document.querySelector('.hide__menu--list__type.adminManager__item');
 
@@ -421,7 +391,6 @@ manageBtn.addEventListener('click', e => {
   window.location.href = '/html/page/admin/Home.html';
 });
 
-// =========================== end: GO TO ADMIN PAGE ===========================
 const showEyeRegister = document.querySelector('.showEyeRegister');
 const hideEyeRegister = document.querySelector('.hideEyeRegister');
 
@@ -456,7 +425,6 @@ hideEyeLogin.addEventListener('click', e => {
   hideEyeLogin.classList.toggle('hide');
 });
 
-// start: Checking login when click cartIcon
 const cartIcon = document.querySelector('.header__bottom--extention-cart');
 const cartBtn = cartIcon.parentElement;
 const cartBtnLowDevice = document.querySelector('.hide__menu--list__extention .header__bottom--extention-cart');
@@ -480,4 +448,3 @@ if (!userLogin) {
     closeMenu();
   });
 }
-// end: Checking login when click cartIcon
