@@ -11,7 +11,6 @@ const numberOfCart = document.querySelector('#nav-item-cart p');
 
 let accounts = JSON.parse(localStorage.getItem('accounts'));
 
-// Nếu trên local không có item accounts thì sẽ push lên
 if (!accounts) {
   accounts = [
     {
@@ -28,7 +27,6 @@ if (!accounts) {
   localStorage.setItem('accounts', JSON.stringify(accounts));
 }
 
-// Kiểm tra đã đăng nhập hay chưa ?
 const checkLoggedIn = () => {
   const userLogin = JSON.parse(localStorage.getItem('User'));
   const userList = document.querySelector('.header__bottom--user__list');
@@ -45,7 +43,6 @@ const checkLoggedIn = () => {
     userProductBtn.addEventListener('mouseout', e => {
       userList.style.display = 'none';
     });
-    // Kiểm tra quyền truy cập User nếu là admin thì hiển thị btn Quản lý
     if (userLogin.isAdmin) {
       document.querySelectorAll('.adminManager__item').forEach(item => (item.style.display = 'block'));
     } else {
@@ -58,7 +55,6 @@ const checkLoggedIn = () => {
 
 checkLoggedIn();
 
-// =========================== start: LOGOUT LOGIC ===========================
 const logoutBtn = document.querySelector('.logout');
 
 const logoutHandler = () => {
@@ -68,18 +64,11 @@ const logoutHandler = () => {
 };
 
 logoutBtn.addEventListener('click', logoutHandler);
-// =========================== end: LOGOUT LOGIC ===========================
-
-// =========================== start: GO TO ADMIN PAGE ===========================
 const manageBtn = document.querySelector('.adminManager');
 
 manageBtn.addEventListener('click', e => {
   window.location.href = '/html/page/admin/Home.html';
 });
-
-// =========================== end: GO TO ADMIN PAGE ===========================
-
-// Mở form để đăng ký
 function openFormRegister() {
   if (!isLoggedIn) {
     userWrapper.classList.add('user__active');
@@ -88,7 +77,6 @@ function openFormRegister() {
   }
 }
 
-// Đóng form đăng ký
 const hideFormRegLogin = () => {
   userWrapper.style.animation = `fade 0.5s ease-in`;
   setTimeout(() => {
@@ -100,13 +88,11 @@ const hideFormRegLogin = () => {
   }, 450);
 };
 
-// Xử lý sự kiện click khi mở form
 userProductBtn.addEventListener('click', e => {
   checkLoggedIn();
   openFormRegister();
 });
 
-// Xử lý khi bấm vào cart khi chưa đăng nhập
 if (!isLoggedIn) {
   cartProductBtn.addEventListener('click', e => {
     e.preventDefault();
@@ -115,12 +101,10 @@ if (!isLoggedIn) {
   });
 }
 
-// Xử lý sự kiện click khi đóng form
 btnCloseGlobal.addEventListener('click', e => {
   hideFormRegLogin();
 });
 
-// Xử lý khi bấm vào đăng ký
 let DUMMY_API = [];
 
 const registerSubmitBtn = document.querySelector('.register__info--submit');
@@ -162,7 +146,7 @@ registerSubmitBtn.addEventListener('click', e => {
     showMessageNameRes.innerText = '';
   }
 
-  const patternEmail =  /@.*\.[a-zA-z]{2,3}$/gi;
+  const patternEmail = /@.*\.[a-zA-z]{2,3}$/gi;
 
   if (email.length === 0) {
     showMessageEmailRes.innerText = '* Bạn chưa nhập email';
@@ -210,8 +194,6 @@ registerSubmitBtn.addEventListener('click', e => {
     localStorage.setItem('accounts', JSON.stringify(accounts));
 
     const isHasDummyAPI = JSON.parse(localStorage.getItem('DUMMY_API'));
-    // Nếu chưa có dữ liệu DUMMY API thì chỉ cần
-    // tạo mới hoàn toàn dựa trên accounts
     if (!isHasDummyAPI) {
       accounts.forEach(account => {
         DUMMY_API.push({
@@ -220,7 +202,6 @@ registerSubmitBtn.addEventListener('click', e => {
         });
       });
     } else {
-      // Nếu đã có dữ liệu DUMMY API thì chỉ cần thêm mới
       DUMMY_API = isHasDummyAPI;
       console.log(DUMMY_API);
       accounts.forEach(account => {
@@ -259,8 +240,6 @@ registerSubmitBtn.addEventListener('click', e => {
   }
 });
 
-// Xử lý khi đăng nhập
-// =========================== start: LOGIC FOR REGISTER ===========================
 const loginSubmitBtn = document.querySelector('.login__info--submit');
 const loginEmailInput = document.querySelector('.login__info--input-email');
 const loginPasswordInput = document.querySelector('.login__info--input-password');
@@ -333,11 +312,6 @@ loginSubmitBtn.addEventListener('click', e => {
     }
   }
 });
-
-// =========================== end: LOGIC FOR REGISTER ===========================
-
-// ============================= Start: Switch mode reg/log
-//Change to login
 const signinBtn = document.querySelector('.register__background button');
 
 signinBtn.addEventListener('click', e => {
@@ -345,7 +319,6 @@ signinBtn.addEventListener('click', e => {
   userWrapper.classList.remove('register__active');
 });
 
-//Change to login when on low device
 const signinBtnOnLowDevice = document.querySelector('.signin button');
 const registerAgainOnLowDevice = document.querySelector('.register__again button');
 
@@ -359,15 +332,11 @@ registerAgainOnLowDevice.addEventListener('click', e => {
   userWrapper.classList.add('register__active');
 });
 
-//Change to register when show login form
 const registerAgain = document.querySelector('.login__background button');
 registerAgain.addEventListener('click', e => {
   userWrapper.classList.add('register__active');
   userWrapper.classList.remove('login__active');
 });
-// ============================= end: Switch mode reg/log
-
-// Xử lý hiện ô đăng ký ở footer
 const section4 = document.querySelector('.section--4-container ');
 
 if (!isLoggedIn) {
@@ -379,7 +348,6 @@ if (!isLoggedIn) {
   });
 }
 
-// Ẩn hiện password
 const showEyeRegister = document.querySelector('.showEyeRegister');
 const hideEyeRegister = document.querySelector('.hideEyeRegister');
 
@@ -414,7 +382,6 @@ hideEyeLogin.addEventListener('click', e => {
   hideEyeLogin.classList.toggle('hide');
 });
 
-// Cập nhật tên cho User
 const headerTop = document.querySelector('.header__top');
 
 if (isLoggedIn) {
@@ -424,40 +391,25 @@ if (isLoggedIn) {
 } else {
   headerTop.querySelector('.header__top-item--left').style.display = 'none';
 }
-///-------------------------------
-// start : checking login when click Tai khoan
 
-// function HienthiTaikhoan(){ 
-//   console.log( document.querySelector(".user__wrapper")); 
-//   var x = document.querySelector(".user__wrapper"); 
-//   if (x.style.display === 'flex') { 
-//       x.style.display = 'none'; 
-//     } else { 
-//       x.style.display ='flex'; 
-//     } 
-//   }
-
-
-
-
-function HienthiTaikhoan(){
+function HienthiTaikhoan() {
   var User = JSON.parse(localStorage.getItem('User'));
   console.log(User);
-  console.log( document.querySelector(".user__wrapper"));
+  console.log(document.querySelector(".user__wrapper"));
   document.querySelector(".user__wrapper").style.display = 'flex';
   const userLogin = JSON.parse(localStorage.getItem('User'));
   const userList = document.querySelector('.header__bottom--user__list');
   const cartBtn = document.getElementById('cart');
   if (userLogin) {
     document.querySelector(".user__wrapper").style.display = 'none';
-    var li = document.getElementById('HienthiTaikhoan');   
-    li.innerHTML = '<i class="fa-solid fa-door-open" style="color: white"></i><p style="color: white">Đăng xuất</p>'   
+    var li = document.getElementById('HienthiTaikhoan');
+    li.innerHTML = '<i class="fa-solid fa-door-open" style="color: white"></i><p style="color: white">Đăng xuất</p>'
     li.setAttribute("id", "");
     li.setAttribute("onclick", "");
     li.setAttribute("class", "");
-    li.addEventListener('click', function() {
-    localStorage.removeItem('User');
-    window.location.href = "product.html";
+    li.addEventListener('click', function () {
+      localStorage.removeItem('User');
+      window.location.href = "product.html";
     });
   } else {
     cartBtn.style.display = 'none';
@@ -465,8 +417,7 @@ function HienthiTaikhoan(){
     console.log('Tài khoản chưa đăng nhập');
   }
 }
-//end : checking login when click Tai khoan
-function Dangky__btn(){
-    document.querySelector(".register").style.opacity = '1';
+function Dangky__btn() {
+  document.querySelector(".register").style.opacity = '1';
 }
 
