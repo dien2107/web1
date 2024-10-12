@@ -1,97 +1,6 @@
-// import DUMMY_DATA from '../../database/userData.js';
-import DUMMY_PRODUCTS from '../../database/products.js';
-// const productsList = DUMMY_PRODUCTS;
-// console.log(productsList);
-// localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(DUMMY_PRODUCTS));
 const productsList = JSON.parse(localStorage.getItem('DUMMY_PRODUCTS'));
-// console.log(userData)
-let datalocal = productsList;
-let userLocal = JSON.parse(localStorage.getItem('User'));
 
-// if (!localStorage.getItem('codeHasRunBefore')) {
-//   try {
-//     if (!userLocal || !datalocal) {
-//       throw new Error('Required variables are undefined.');
-//     }
-
-//     var DateTimeP = [];
-//     const DUMMY_API = [
-//       {
-//         idUser: userLocal.id,
-//         cart: []
-//       }
-//     ];
-
-//     for (let i = 0; i < datalocal.length; i++) {
-//       DateTimeP.push({
-//         productId: datalocal[i].ID,
-//         createAT: '14/11/2023  20:00',
-//         updateAt: '14/11/2023  20:00'
-//       });
-//     }
-
-//     localStorage.setItem('DateTimeP', JSON.stringify(DateTimeP));
-//     localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(datalocal));
-//     localStorage.setItem('DUMMY_API', JSON.stringify(DUMMY_API));
-
-//     localStorage.setItem('codeHasRunBefore', 'true');
-//   } catch (error) {
-//     console.error('Error in code:', error.message);
-//   }
-// } else {
-//   console.log('Code will not run again.');
-// }
-
-// const DUMMY_API = [
-//   {
-//     idUser: 'admin',
-//     cart: [
-//       {
-//         idOrder: 'd2jdm',
-//         dateCreate: '2023-11-23T12:30:00Z',
-//         dateCancel: '',
-//         product: [
-//           {
-//             id: 'a07c4d6ca1',
-//             quantity: 3,
-//             processed: true
-//           },
-//           {
-//             id: 'a07c4d6ca1',
-//             quantity: 3,
-//             processed: false
-//           }
-//         ]
-//       }
-//     ]
-//   },
-//   {
-//     idUser: 'Asddv',
-//     cart: [
-//       {
-//         idOrder: 'd3jdm',
-//         dateCreate: '2023-11-23T12:30:00Z',
-//         dateCancel: '',
-//         product: [
-//           {
-//             id: '36b9b496cb',
-//             quantity: 3,
-//             processed: true
-//           }
-//         ]
-//       }
-//     ]
-//   }
-// ];
-
-// // Fake dữ liệu để test, thay đổi nó để gắn vào dữ liệu thật ở đây
-// // Note: Nhớ tìm hết các giá trị 'DUMMY_API' và đổi lại
-// localStorage.setItem('DUMMY_API', JSON.stringify(DUMMY_API));
 let userData = JSON.parse(localStorage.getItem('DUMMY_API'));
-
-// let userData = DUMMY_API;
-
-// start: Open set status
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 
@@ -120,11 +29,9 @@ const showModal = (user, currentPID, cart, currentQNT) => {
     form.innerHTML = '';
   }
 
-  // Tìm kiếm tên khách hàng trong list accounts trên localhost
   const accounts = JSON.parse(localStorage.getItem('accounts'));
   const userInfo = accounts.find(acc => acc.id === user.idUser);
 
-  // Chuyển đổi thành ngày/tháng/năm giờ:phút:giấy
   const convertDateCreate = new Date(cart.dateCreate);
   const time =
     convertDateCreate.getDate().toString().padStart(2, '0') +
@@ -139,7 +46,6 @@ const showModal = (user, currentPID, cart, currentQNT) => {
     ':' +
     convertDateCreate.getSeconds().toString().padStart(2, '0');
 
-  // Apply data
   const html = `
   <form action="">
     <div class="modal__content">
@@ -190,10 +96,6 @@ const showModal = (user, currentPID, cart, currentQNT) => {
 };
 
 overlay.addEventListener('click', closeModal);
-// end: Open set status
-
-// start: apply html into layout
-// localStorage.setItem('accounts', JSON.stringify(DUMMY_DATA));
 const listProducts = document.querySelector('.admin__content--body__products');
 
 const uiElement = (idUser, idOrder, day, month, year, quantity, productInfo, idProduct, isProcessed) => {
@@ -215,7 +117,6 @@ const uiElement = (idUser, idOrder, day, month, year, quantity, productInfo, idP
     </li>
     <li class="admin__content--body__dateCreate products--item__dateCreate">${day}/${month}/${year}</li>
     ${
-      // Hiện thị trạng thái đơn xử lý/ chưa xử lý
       isProcessed
         ? `<li class="admin__content--body__status products--item__status">
         Đã xử lý
@@ -240,20 +141,15 @@ const renderItems = (processed = false, processing = false, data = userData) => 
   data?.forEach(user => {
     const idUser = user.idUser;
 
-    // Nếu trong cart của user không có phần tử tức là user đó chưa mua gì
-    // thì không cần render giao diện
     if (user.cart?.length === 0) {
       return;
     }
 
-    // Sau khi filter theo idOrder thì có dữ liệu cart trả về underfined
     if (user.cart !== undefined) {
       user.cart.forEach(cart => {
         const idOrder = cart.idOrder;
         const dateCreate = cart.dateCreate;
         const convertDateCreate = new Date(dateCreate);
-
-        // Chuyển đổi ngày tháng năm phù hợp để hiển thị giao diện
         const day = convertDateCreate.getDate().toString().padStart(2, '0');
         const month = (convertDateCreate.getMonth() + 1).toString().padStart(2, '0');
         const year = convertDateCreate.getFullYear();
@@ -264,8 +160,6 @@ const renderItems = (processed = false, processing = false, data = userData) => 
           const isProcessed = product.processed;
 
           const productInfo = productsList.find(product => product.ID === idProduct);
-
-          // Nếu đối số truyền vào là cần lọc sản phẩm đã xử lý
           let html;
 
           if (processed && isProcessed === true) {
@@ -282,7 +176,6 @@ const renderItems = (processed = false, processing = false, data = userData) => 
     }
   });
 };
-// start: Logic for filter products
 const submitBtn = document.querySelector('.order--filter__btn');
 
 let data;
@@ -304,8 +197,6 @@ submitBtn.addEventListener('click', e => {
     return;
   }
 
-  // console.log(day +" " + month + " " +year);
-  // Nếu có dữ liệu nhập vào ít nhất ở 1 ô thì mới cuộn xuống, không có thì k làm gì
   if (
     inputIdClientValue === '' &&
     inputIdOrderValue === '' &&
@@ -324,8 +215,6 @@ submitBtn.addEventListener('click', e => {
   }
 
   data = userData;
-
-  // Lọc theo ngày tháng năm
 
   if (inputOrderDateBegin && inputOrderDateEnd) {
     const dayBegin = timeBegin.getDate();
@@ -353,17 +242,11 @@ submitBtn.addEventListener('click', e => {
       });
     });
   }
-
-  // Lọc theo id client
   if (inputIdClientValue) {
     data = data.filter(user => user.idUser === inputIdClientValue.trim());
   }
 
-  // Lọc theo id order
   if (inputIdOrderValue) {
-    // Dùng map để trả về mảng mới với idUser là id user lặp qua
-    // còn cart trả về là một object tìm thấy ấy id nếu không thì trả về underfined
-    // Từ đó filter lại cái cart nào vị trí đầu khác underfined và length > 0 mới lấy
     data = data
       .map(user => ({
         idUser: user.idUser,
@@ -410,14 +293,9 @@ resetBtn.addEventListener('click', e => {
   init();
   paginationHandler();
 });
-// end: Logic for filter products
-
-// start: Logic for click edit status handler
 const updateProcessingHandler = (user, currentPID, currentOID) => {
-  // Lọc qua giỏ hàng của người dùng để tìm idOrder chính xác
   user.cart = user.cart.map(cart => {
     if (cart.idOrder === currentOID) {
-      // Sau khi tìm được idOrder chính xác thì tìm sản phẩm cần xử lý và xử lý
       cart.product.forEach(product => {
         if (product.id === currentPID && !product.processed) {
           product.processed = true;
@@ -444,9 +322,6 @@ const clickedProcessBtnHandler = (user, currentPID, currentOID) => {
     closeModal();
     init();
     paginationHandler();
-
-    // Khi bấm vào xử lý đơn, tức là đã thu tiền mà đã thu tiền thì
-    // reload lại page cho nó cập nhật giá trị ở page home admin
     localStorage.setItem('isNeedReloadPageAdmin', JSON.stringify(true));
 
     localStorage.setItem('DUMMY_API', JSON.stringify(userData));
@@ -456,7 +331,6 @@ const clickedProcessBtnHandler = (user, currentPID, currentOID) => {
 const updateLocalStorageForProcessHandler = (currentUID, currentPID, currentOID, currentQNT) => {
   userData.forEach((user, idx) => {
     if (user.idUser === currentUID) {
-      // Kiểm tra id order chính xác với element click
       user.cart.forEach(cart => {
         if (cart.idOrder === currentOID) {
           showModal(user, currentPID, cart, currentQNT);
@@ -483,7 +357,6 @@ const clickIconHandler = () => {
     });
   });
 };
-// end: Logic for click edit status handler
 
 const clickIconInfoHandler = () => {
   const isActiveElements = document.querySelectorAll('.isActiveStatus');
@@ -497,7 +370,6 @@ const clickIconInfoHandler = () => {
 
       userData.forEach((user, idx) => {
         if (user.idUser === currentUID) {
-          // Kiểm tra id order chính xác với element click
           user.cart.forEach(cart => {
             if (cart.idOrder === currentOID) {
               showModal(user, currentPID, cart, currentQNT);
@@ -511,11 +383,9 @@ const clickIconInfoHandler = () => {
   });
 };
 
-// start: logic click delete btn
 const deleteProduct = (currentUID, currentPID, currentOID, isNonActiveItem) => {
   userData.forEach(user => {
     if (user.idUser === currentUID) {
-      // Lọc ra đơn hàng khác với id đơn hàng xóa
       user.cart = user.cart.filter(cart => {
         if (cart.idOrder !== currentOID) {
           return true;
@@ -583,9 +453,6 @@ function clickDeleteBtnHandler() {
     });
   });
 }
-// end: logic click delete btn
-
-// start: sort all products is non active on top
 const sortProductsNonActiveFirst = () => {
   const productList = document.querySelector('.admin__content--body__products');
 
@@ -612,7 +479,6 @@ const sortProductsNonActiveFirst = () => {
     productList.appendChild(item);
   });
 };
-// end: sort all products is non active on top
 
 const init = () => {
   renderItems();
@@ -625,7 +491,6 @@ const init = () => {
 
 init();
 
-// start: pagination
 function paginationHandler() {
   const productItems = document.querySelectorAll('.admin__content--body__products ul');
   let currentPage = 0;
@@ -648,7 +513,6 @@ function paginationHandler() {
     storeItemsPerPage = [];
   }
 
-  // Checking on first page
   function renderPaginationBtn(isProcessed) {
     const pagination = document.querySelector('.pagination__order');
     pagination.innerHTML = '';
@@ -699,9 +563,6 @@ function paginationHandler() {
   renderPaginationBtn();
 }
 paginationHandler();
-// end: pagination
-
-// Render lại hình ảnh
 function renderImgTruePath() {
   const productOrders = document.querySelectorAll('.admin__content--body__products--item .products--item__img');
   productOrders.forEach(order => {
