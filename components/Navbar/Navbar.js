@@ -15,7 +15,6 @@ if (!localStorage.getItem('inputSearchCheck')) {
 
   localStorage.setItem('inputSearchCheck', 'true');
 } else {
-  // console.log('Mã không chạy nữa');
 }
 const searchValue = document.getElementById('searchValue');
 const submitBtn = document.getElementById('submit-btn');
@@ -125,7 +124,6 @@ function displayItem(startIndex, endIndex, data) {
           id: e.ID,
           quantity: quantity
         };
-        // alert(quantity);
         let found = false;
 
         if (userLocal.cart.length > 0) {
@@ -160,7 +158,6 @@ navbarToggle.addEventListener('click', () => {
   if (!check) {
     navDropdown.style.display = 'block';
     navbarToggle.style.transform = 'rotate(180deg)';
-    // navbarToggle.appendChild(closeIcon);
   } else {
     navDropdown.style.display = 'none';
     navbarToggle.style.transform = 'rotate(0deg)';
@@ -178,7 +175,6 @@ const toastSaveProduct = document.querySelector('.toast-save-product');
 const toast = document.querySelectorAll('.toast');
 const toastContainer = document.querySelector('.toast-container');
 const overlayid = document.getElementById('overlayid');
-// const navItemHeart = document.getElementById('nav-item-heart');
 
 input.addEventListener('input', event => {
   event.preventDefault();
@@ -252,9 +248,7 @@ const navItemCart = document.getElementById('nav-item-cart');
 let quantity = parseInt(document.getElementById('quantity'));
 const clickAddCart = () => {
   const isLoggedIn = JSON.parse(localStorage.getItem('User'));
-  // Nếu chưa đăng nhập thì không cho mua sản phẩm
   if (!isLoggedIn) {
-    // Ẩn đi modal vừa bật
     overlay.style.display = 'none';
     toastContainer.style.display = 'none';
     return;
@@ -271,7 +265,6 @@ const clickAddCart = () => {
     id: overlayid.textContent,
     quantity: quantity
   };
-  // alert(quantity);
   let found = false;
   if (userLocal.cart.length > 0) {
     for (let i = 0; i < userLocal.cart.length; i++) {
@@ -287,7 +280,6 @@ const clickAddCart = () => {
     quantity = 1;
   }
 
-  // alert("Ngày " + ngay + "/" + thang + "/" + nam + " lúc " + gio + ":" + phut + ":" + giay)
   for (let i = 0; i < accountData.length; i++) {
     if (accountData[i].id === userLocal.id) {
       accountData[i].cart = userLocal.cart;
@@ -301,14 +293,9 @@ const clickAddCart = () => {
   navItemCart.appendChild(itemCart);
 };
 
-// overlayAddCart.addEventListener('click', () => {
-//   clickAddCart();
-// });
-
 submitBtn.addEventListener('click', e => {
   e.preventDefault();
   const matchingProduct = database.filter(e => e.name.toLowerCase().includes(inputSearch[0].trim().toLowerCase()));
-  // console.log(matchingProduct)
   productList.innerHTML = '';
   input.innerHTML = '';
 
@@ -340,59 +327,6 @@ submitBtn.addEventListener('click', e => {
 returnPage.addEventListener('click', () => {
   document.location.reload();
 });
-
-// window.addEventListener('popstate', (event) => {
-//     alert('Quay lại trang');
-// });
-
-// input.addEventListener('keydown', (event) => {
-
-//     const inputValue = input.value.toLowerCase();
-//     const matchingProduct = database.filter(e => e.name.toLowerCase().includes(inputValue));
-//     if (event.key === 'Enter') {
-
-//         if (matchingProduct) {
-//             matchingProduct.forEach(e => {
-//                 let colors = e.dataColors;
-//                 console.log(colors);
-//                 let productItem = document.createElement('div');
-//                 productItem.classList.add('product-item');
-//                 productItem.innerHTML = `
-//                        <div class = "id">${e.ID}</div>
-//                          <div class="imgSrc">
-//                          <img src="${e.imgSrc}">
-//                          <div class="overlay-hover">
-
-//                         <div class="top-button">
-//                             <i class="fa-solid fa-cart-plus" id="add-cart"></i>
-//                             <i class="fa-solid fa-heart" id="like"></i>
-//                         </div>
-//                         <div class="overlay-click">
-
-//                         <button id="buy-now">
-//                                 Mua ngay
-//                         </button>
-
-//                         </div>
-
-//                          </div>
-//                          </div>
-//                         <div class="product-information">
-//                              <div class="color-dots">${colors.map(color => `<div class="dot-items" style="background-color: ${color};"></div>`)}</div>
-//                             <h3>${e.name}</h3>
-//                             <p>Price: ${e.price}</p>
-//                         </div>
-
-//                     `;
-//                 productList.appendChild(productItem);
-//             })
-//         } else {
-//             alert('Không tìm thấy sản phẩm có tên: ' + inputValue);
-//         }
-//         input.value = '';
-//         event.preventDefault();
-//     }
-// });
 
 var totalPages = Math.ceil(data.length / 10);
 const ITEMS_PER_PAGE = 10;
@@ -436,7 +370,6 @@ function generatePagination(data) {
     pagination.appendChild(pageLink);
   }
 
-  // Nút Next
   var nextBtn = document.createElement('a');
   nextBtn.href = 'javascript:void(0);';
   nextBtn.innerHTML = '&raquo;';
@@ -456,13 +389,10 @@ function loadData(data) {
   totalPages = Math.ceil(data.length / 10);
   generatePagination(data);
 
-  // console.log(startIndex);
-  // console.log(endIndex);
   if (endIndex > data.length) {
     endIndex = data.length;
   }
   displayItem(startIndex, endIndex, data);
-  // updateEvent();
 }
 
 
