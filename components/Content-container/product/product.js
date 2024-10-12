@@ -62,15 +62,12 @@ decrement.addEventListener('click', () => {
 
 const clickAddCart = () => {
   const isLoggedIn = JSON.parse(localStorage.getItem('User'));
-  // Nếu chưa đăng nhập thì không cho mua sản phẩm
   var quantity = parseInt(document.getElementById('quantity').textContent);
   if (quantity < 1) {
     alert('Vui lòng chọn số lượng lớn hơn 0!');
     return;
   }
-  // console.log(quantity);
   if (!isLoggedIn) {
-    // Ẩn đi modal vừa bật
     overlay.style.display = 'none';
     toastContainer.style.display = 'none';
 
@@ -78,12 +75,10 @@ const clickAddCart = () => {
     openFormRegister();
     return;
   }
-  // alert(quantity);
   const process = {
     id: overlayid.textContent,
     quantity: quantity
   };
-  // alert(quantity);
   let found = false;
   if (userLocal.cart.length > 0) {
     for (let i = 0; i < userLocal.cart.length; i++) {
@@ -94,7 +89,6 @@ const clickAddCart = () => {
       }
     }
   }
-  // console.log(found);
   for (let i = 0; i < accountData.length; i++) {
     if (accountData[i].id === userLocal.id) {
       accountData[i].cart = userLocal.cart;
@@ -108,17 +102,11 @@ const clickAddCart = () => {
     localStorage.setItem('accounts', JSON.stringify(accountData));
   }
 
-  console.log(userLocal.cart);
-  // localStorage.setItem('User', JSON.stringify(userLocal));
-  // localStorage.setItem('accounts', JSON.stringify(accountData));
-  // localStorage.setItem('test', JSON.stringify('test'))
-
   const itemCart = document.createElement('p');
   itemCart.classList.add('item-cart');
   itemCart.innerText = `${userLocal?.cart.length}`;
   navItemCart.appendChild(itemCart);
 
-  // Ẩn đi modal
   alert('Đã thêm vào giỏ hàng!');
   overlay.style.display = 'none';
   toastContainer.style.display = 'none';
@@ -126,7 +114,6 @@ const clickAddCart = () => {
 
 overlayAddCart.addEventListener('click', () => {
   clickAddCart();
-  // alert('clicked')
 });
 
 toast.forEach(e => {
@@ -179,7 +166,6 @@ function clickSave(like) {
     toastText.innerText = 'Đã xóa khỏi danh mục yêu thích';
     toastContainer.style.display = 'flex';
     toastSaveProduct.style.display = 'flex';
-    // overlayLike.style.color = 'gray';
     like.style.color = 'gray';
     checkLike = true;
     checkLikeOverlay = !checkLikeOverlay;
@@ -217,8 +203,6 @@ function displayItem(startIndex, endIndex, data) {
       let productItem = document.createElement('div');
       productItem.classList.add('product-item');
 
-      // console.log(data[i].imgSrc);
-
       productItem.innerHTML = `
                        <div class = "id">${data[i].ID}</div>
                          <div class="imgSrc">
@@ -250,7 +234,6 @@ function displayItem(startIndex, endIndex, data) {
     }
   }
 }
-// displayItem(0, productsPerPage, data);
 
 const itemCart = document.createElement('p');
 itemCart.classList.add('item-cart');
@@ -263,7 +246,6 @@ const itemHeart = document.createElement('p');
 itemHeart.classList.add('item-heart');
 
 function updateEvent() {
-  // let quantity = 1;
   const productItems = document.querySelectorAll('.product-item');
 
   for (let i = 0; i < productItems.length; i++) {
@@ -297,7 +279,6 @@ function updateEvent() {
     });
     addCart.addEventListener('click', () => {
       const isLoggedIn = JSON.parse(localStorage.getItem('User'));
-      // Nếu chưa đăng nhập thì không cho mua sản phẩm
       if (!isLoggedIn) {
         alert('Vui lòng đăng nhập trước khi thêm vào giỏ hàng!');
         openFormRegister();
@@ -317,7 +298,6 @@ function updateEvent() {
         quantity: quantity
       };
 
-      // alert(quantity);
       let found = false;
 
       if (userLocal.cart.length > 0) {
@@ -332,7 +312,6 @@ function updateEvent() {
 
       if (!found) {
         userLocal.cart.push(process);
-        // quantity = 0;
       }
 
       for (let i = 0; i < accountData.length; i++) {
@@ -392,7 +371,6 @@ function generatePagination(data) {
     pagination.appendChild(pageLink);
   }
 
-  // Nút Next
   var nextBtn = document.createElement('a');
   nextBtn.href = 'javascript:void(0);';
   nextBtn.innerHTML = '&raquo;';
@@ -412,8 +390,6 @@ function loadData(data) {
   totalPages = Math.ceil(data.length / 10);
   generatePagination(data);
 
-  // console.log(startIndex);
-  // console.log(endIndex);
   if (endIndex > data.length) {
     endIndex = data.length;
   }
@@ -435,8 +411,6 @@ function displayItemTypes() {
 
 displayItemTypes();
 
-// Xử lý sự kiện ẩn modal
-// Khi vào thẻ cha overlay chứa tất cả modal thì mới ẩn đi
 overlay.addEventListener('click', function (event) {
   if (event.target === overlay) {
     overlay.style.display = 'none';
