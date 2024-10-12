@@ -1,4 +1,3 @@
-//Slider
 const videos = document.querySelectorAll('.header__slider video');
 const btnLeft = document.querySelector('.header__slide--btn-left');
 const btnRight = document.querySelector('.header__slide--btn-right');
@@ -51,7 +50,6 @@ btnRight.addEventListener('click', e => {
 
 showSlide(currentSlide);
 
-// Header dots
 const dots = document.querySelectorAll('.dots li');
 
 function activeDots() {
