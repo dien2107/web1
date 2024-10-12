@@ -2,7 +2,6 @@ const DUMMY_PRODUCTS = JSON.parse(localStorage.getItem('DUMMY_PRODUCTS'));
 let data = DUMMY_PRODUCTS;
 let filteredData = [...data];
 
-// const currentDateTime = JSON.parse(localStorage.getItem('DateTimeP'));
 const closeFormClick = document.getElementById('close');
 
 function setValuesInput(ImageUrl, Name, UpdateDate, CreationDate, Type) {
@@ -50,10 +49,7 @@ function copyNameProduct(name) {
 }
 
 function displayFormChange() {
-  // Hiển thị modal
   showModal();
-
-  // Truyền giao diện vào modal
   const modal = document.querySelector('.modal');
   modal.innerHTML = '';
 
@@ -151,47 +147,15 @@ function displayFormChange() {
   });
 }
 
-// function closeForm() {
-//   const form = document.getElementById('change-product-info-container');
-//   const close = form.querySelector('.close');
-//   close.style.display = 'none';
-//   form.style.display = 'none';
-// }
-
-// closeFormClick.addEventListener('click', () => {
-//   closeForm();
-// });
 
 function updateEvent(item, index, id, element) {
-  // copy
-  // const copy = item.querySelector('#copy');
-  // copy.addEventListener('click', () => {
-  //   copyNameProduct(element.imgSrc);
-  // });
-
-  //  console.log(index);
-
-  // edit
-
-  // const edit = item.querySelector('#edit');
-  // edit.addEventListener('click', () => {
-  //   displayFormChange();
-  //   setValuesInput(element.imgSrc, element.name, currentDateTime[index].updateAt, currentDateTime[index].updateAt);
-  //   id.innerText = element.ID;
-  // });
   const edits = item.querySelectorAll('.edit');
   edits.forEach(edit => {
     edit.addEventListener('click', e => {
       displayFormChange();
-
-      // Truy vấn ngược ra element cha đẻ lấy id, name,...
       const id = edit.parentElement.querySelector('.id').innerText.trim();
-
-      // Set name mặc định là name hiện tại
       const currentProductName = edit.parentElement.querySelector('.name').innerText.trim();
       document.querySelector('.form-group-name #name').setAttribute('value', currentProductName);
-
-      // Set price mặc định là price hiện tại
       const currentProductPrice = edit.parentElement
         .querySelector('.price')
         .innerText.trim()
@@ -199,15 +163,12 @@ function updateEvent(item, index, id, element) {
         .replace(/\./g, '');
       document.querySelector('#priceEditForm').setAttribute('value', currentProductPrice);
 
-      // Set mã id mặc định là id hiện tại
       const currentIdProduct = edit.parentElement.querySelector('.id').innerText.trim();
       document.querySelector('#idProductEdit').setAttribute('value', currentIdProduct);
 
-      // Set phân loại
       const currentTypeProduct = edit.parentElement.querySelector('.type').innerText.trim();
       document.querySelector('.form-group-type #type').value = currentTypeProduct;
 
-      // Set date
       const currentCreateDate = edit.parentElement.querySelector('.date-creat').innerText.trim().split('/');
       const currentCreateDay = currentCreateDate[0];
       const currentCreateMonth = currentCreateDate[1];
@@ -222,14 +183,12 @@ function updateEvent(item, index, id, element) {
 
       document.querySelector('#dateupdate').value = `${currentUpdateYear}-${currentUpdateMonth}-${currentUpdateDay}`;
 
-      // Nếu có sự input hình ảnh thì hiển thị
       const formImgInput = document.querySelector('.form-group #imageUrl');
 
       formImgInput.addEventListener('change', e => {
         previewImage(formImgInput, '#form-group--previewImg');
       });
 
-      // Kiểm tra ô input không check thì hiện input file hình ảnh
       const formCheckboxDeleteImg = document.querySelector('#deleteImgFormEdit');
       const formCheckboxSaveImg = document.querySelector('#saveImgFormEdit');
       const formCheckboxChangeImg = document.querySelector('#changeImgFormEdit');
@@ -281,9 +240,6 @@ function updateEvent(item, index, id, element) {
         const imgMessage = document.querySelector('.imgMessage');
         const priceMessage = document.querySelector('.priceMessage');
         const idProductMessage = document.querySelector('.idProductMessage');
-
-        // Check đúng sai dữ liệu
-
         if (imageUrlValue === '' && formCheckboxChangeImg.checked) {
           isValidInputImg = false;
           imgMessage.innerHTML = '* Vui lòng chọn file hình ảnh';
@@ -339,7 +295,6 @@ function updateEvent(item, index, id, element) {
           idProductMessage.innerHTML = '* Vui lòng nhập mã sản phẩm';
           isValidIdProduct = false;
         } else if (
-          // Kiểm tra vừa khác id trong list data và khác với id hiện tại thì mới thông báo lỗi
           data.some(
             product => product.ID === formIdProductValue.trim() && currentIdProduct !== formIdProductValue.trim()
           )
@@ -353,9 +308,6 @@ function updateEvent(item, index, id, element) {
           idProductMessage.innerHTML = '';
           isValidIdProduct = true;
         }
-
-        // Nếu có đầu vào nhập ngày bắt đầu và ngày kết thúc thì
-        // tiếp tục kiểm tra ngày bắt đầu lớn hơn ngày kết thúc
         if (isValidDateCreate && isValidDateUpdate) {
           if (formDateCreateValue > formDateUpdateValue) {
             isValidDateCreate = false;
@@ -383,8 +335,6 @@ function updateEvent(item, index, id, element) {
               if (formCheckboxDeleteImg.checked) {
                 whatImgSrcIs = '../../../database/images/comming.jpg';
               } else if (formCheckboxChangeImg.checked) {
-                // Hình ảnh lấy từ function previewImage khi hiện thị lên màn hình
-                // Nhưng ở form này cho width: 0 nên không thấy hình ảnh, chỉ lấy được link src
                 whatImgSrcIs = formImgPathLink.src;
               } else if (formCheckboxSaveImg) {
                 whatImgSrcIs = product.imgSrc;
@@ -399,9 +349,6 @@ function updateEvent(item, index, id, element) {
               product.ID = formIdProductValue;
             }
           });
-
-          // Đặt item = 'needReturnProductPage' trên local để khi reload lại trang
-          // kiểm tra xem có cần quay lại trang product admin không
           localStorage.setItem('needReturnProductPage', JSON.stringify(true));
           localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
 
@@ -413,22 +360,9 @@ function updateEvent(item, index, id, element) {
     });
   });
 
-  // delete
-  // const deleteProduct = item.querySelector('#delete');
-  // deleteProduct.addEventListener('click', () => {
-  //   data.splice(index, 1);
-  //   currentDateTime.splice(index, 1);
-  //   localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
-
-  //   localStorage.setItem('DateTimeP', JSON.stringify(currentDateTime));
-
-  //   location.reload();
-  // });
   const deletes = document.querySelectorAll('.delete');
   deletes.forEach(d => {
     d.addEventListener('click', e => {
-      // Lấy modal để truyền nội dung html vào
-      // Lây overlay để hiển thị
       const modal = document.querySelector('.modal');
 
       modal.innerHTML = '';
@@ -451,19 +385,12 @@ function updateEvent(item, index, id, element) {
 
       const confirmBtn = document.querySelector('.modal--delete__footer--delete');
       const exitBtn = document.querySelector('.modal--delete__footer--exit');
-
-      // Xử lý khi bấm vào thoát thì tắt modal và không xóa sản phẩm
       exitBtn.addEventListener('click', e => {
         hideModal();
       });
-
-      // Xử lý xóa sản phẩm khi bấm chắc chắn
       confirmBtn.addEventListener('click', e => {
         const id = d.parentElement.querySelector('.id').innerText.trim();
         data = data.filter(product => product.ID !== id);
-
-        // Đặt item = 'needReturnProductPage' trên local để khi reload lại trang
-        // kiểm tra xem có cần quay lại trang product admin không
         localStorage.setItem('needReturnProductPage', JSON.stringify(true));
         localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
 
@@ -532,11 +459,8 @@ function disPlayProductItem(pageStart, pageEnd, data) {
     content.appendChild(item);
 
     updateEvent(item, index, id, element);
-    // console.log(element.name);
   }
 }
-
-// add product
 function previewImage(input, element) {
   var imagePreview = document.querySelector(`${element}`);
   var file = input.files[0];
@@ -574,7 +498,6 @@ const addProductBtn = document.getElementById('add-product-btn');
 addProductBtn.addEventListener('click', e => {
   e.preventDefault();
 
-  //Ẩn nút thêm sản phẩm, ẩn ô filter
   addProductBtn.style.display = 'none';
   hideFilterContent();
 
@@ -662,12 +585,10 @@ addProductBtn.addEventListener('click', e => {
     var id = form.querySelector('#productCodeForm');
     var category = form.querySelector('#category');
     var price = form.querySelector('#price');
-    // var codeColor = form.querySelector('#codeColor');
 
     const showMessageNameRes = document.querySelector('.newProductNameMessage');
     const showMessageIdRes = document.querySelector('.newProcductIdMessage');
     const showMessagePrice = document.querySelector('.newProcductPriceMessage');
-    // const showMessageColor = document.querySelector('.newProductColorMessage');
     const showMessageCategory = document.querySelector('.newMessageCategory');
 
     let isValidName = true;
@@ -712,20 +633,6 @@ addProductBtn.addEventListener('click', e => {
       isValidPrice = true;
     }
 
-    // const patternCodeColor = /^#[a-zA-Z0-9]{6}/gi;
-
-    // if (codeColor.value.trim().length === 0) {
-    //   showMessageColor.innerHTML = '* Vui lòng nhập mã màu sản phẩm';
-    //   isValidColor = false;
-    // } else if (!patternCodeColor.test(codeColor.value.trim())) {
-    //   showMessageColor.innerHTML = '* Mã màu phải bắt đầu bằng kí tự # và kết thúc bằng 6 kí tự (vd: #333aaa)';
-    //   isValidColor = false;
-    // } else {
-    //   showMessageColor.innerText = '';
-    //   codeColor.style.border = '1px solid #333';
-    //   isValidColor = true;
-    // }
-
     if (category.value.trim().length === 0) {
       showMessageCategory.innerHTML = '* Vui lòng chọn thể loại xe';
       isValidCategory = false;
@@ -751,14 +658,10 @@ addProductBtn.addEventListener('click', e => {
     if (price.value === '') {
       price.style.border = '1px solid red';
     }
-    // if (codeColor.value === '') {
-    //   codeColor.style.border = '1px solid red';
-    // }
     if (category.value === '') {
       category.style.border = '1px solid red';
     }
 
-    // Kiểm tra nếu tất cả đã nhập hợp lệ
     const isValidForm = isValidName && isValidId && isValidCategory && isValidColor && isValidPrice;
 
     if (isValidForm) {
@@ -769,8 +672,6 @@ addProductBtn.addEventListener('click', e => {
       } else {
         imgLink = imgUrl.src;
       }
-
-      // Khởi tạo ngày hiện tại để set ngày tạo cho sản phẩm mới
       const currentDate = new Date();
       const currentISOString = currentDate.toISOString();
 
@@ -786,20 +687,8 @@ addProductBtn.addEventListener('click', e => {
         dateUpdate: currentISOString
       };
 
-      // var currentTime = new Date();
-      // var year = currentTime.getFullYear();
-      // var month = currentTime.getMonth() + 1;
-      // var day = currentTime.getDate();
-      // var hours = currentTime.getHours();
-      // var minutes = currentTime.getMinutes();
-      // var DateTimeP = {
-      //   createAT: `${day}/${month}/${year}  ${hours}:${minutes}`,
-      //   updateAt: `${day}/${month}/${year}  ${hours}:${minutes}`
-      // };
-      // currentDateTime.push(DateTimeP);
       data.push(newProduct);
       localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
-      // localStorage.setItem('DateTimeP', JSON.stringify(currentDateTime));
 
       const manageProduct = document.getElementById('add-product-container');
       const pagination = document.getElementById('pagination');
