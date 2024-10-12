@@ -1,6 +1,3 @@
-// Kiểm tra xem khi vào manage user list đã có accounts trên local chưa?
-// Nếu chưa thì phải khởi tạo với giá trị trong đó là tài khoản admin mặc định
-// Mục đích để làm cho dữ liệu đổ ra layout
 const accounts = JSON.parse(localStorage.getItem('accounts'));
 if (!accounts) {
   const accounts = [
@@ -19,18 +16,14 @@ if (!accounts) {
   localStorage.setItem('accounts', JSON.stringify(accounts));
 }
 
-// start: Logic for filter products
 const submitBtn = document.querySelector('.user--filter__btn');
 
-// Thêm người dùng
 const addUserBtn = document.getElementById('addUserBtn');
 addUserBtn.addEventListener('click', e => {
-  // Hiển thị modal hoặc form nhập liệu
   e.preventDefault();
   renderAddUserModal();
 });
 
-// Hàm hiển thị modal thêm người dùng
 function renderAddUserModal() {
   showModal();
   modal.innerHTML = `
@@ -59,17 +52,14 @@ function renderAddUserModal() {
 
   const acpAddUserBtn = document.querySelector('.modal--add-user__footer--add');
   acpAddUserBtn.addEventListener('click', () => {
-    // Xử lý thêm người dùng khi nhấn nút "Chắc chắn" trong modal
     addUserHandler();
   });
 
-  // Xử lý xóa modal
   const closeBtn = document.querySelector('.modal--add-user i');
   closeBtn.addEventListener('click', e => {
     closeModal();
   });
 
-  // Xử lý ẩn hiện mật khẩu
   const showBtn = document.querySelector('#eyeIcon');
   showBtn.addEventListener('click', e => {
     var passwordField = document.getElementById('newUserPassword');
@@ -85,7 +75,6 @@ function renderAddUserModal() {
   });
 }
 
-// Hàm xử lý thêm người dùng
 function addUserHandler() {
   const newUserName = document.getElementById('newUserName').value.trim();
   const newUserEmail = document.getElementById('newUserEmail').value.trim();
@@ -139,12 +128,8 @@ function addUserHandler() {
 
   const isValidForm = isValidName && isValidEmail && isValidPassword;
 
-  // Kiểm tra tính hợp lệ của thông tin
   if (isValidForm) {
-    // Lấy danh sách người dùng từ localStorage
     let userList = JSON.parse(localStorage.getItem('accounts')) || [];
-
-    // Tạo đối tượng người dùng mới
 
     const newUser = {
       id: userRole === 'admin' ? 'ad_' + generateRandomUserID(2) : generateRandomUserID(5),
@@ -161,23 +146,16 @@ function addUserHandler() {
 
     userList.push(newUser);
 
-    // Cập nhật danh sách người dùng trong localStorage
     localStorage.setItem('accounts', JSON.stringify(userList));
 
-    // Hiển thị danh sách người dùng mới
     renderUsersInfo(userList);
 
-    // Sau khi renderUsersInfo thì nó bị rơi ra khỏi layout
-    // Nếu quá 6 items thì việc này phải gọi lại function phân trang để nó render lại
-    // Đồng thời gọi function kiểm tra sự kiện click nút xóa item
     paginationHandler();
     clickedDeleteBtnHandler();
-    // Đóng modal hoặc form nhập liệu
     closeModal();
   }
 }
 
-// Hàm tạo id người dùng mới
 function generateRandomUserID(length) {
   const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let userID = '';
@@ -191,7 +169,6 @@ function generateRandomUserID(length) {
   return userID;
 }
 
-// End.....................................
 
 let data;
 submitBtn.addEventListener('click', e => {
@@ -231,7 +208,6 @@ submitBtn.addEventListener('click', e => {
     });
   }
 
-  // If data isn't an array, then convert to array
   const userList = JSON.parse(localStorage.getItem('accounts'));
 
   if (Array.isArray(userList)) {
@@ -257,21 +233,17 @@ submitBtn.addEventListener('click', e => {
       const isAfterOrEqualBeginDate =
         new Date(yearUser, monthUser, dayUser) >= new Date(yearBegin, monthBegin, dayBegin);
       const isBeforeOrEqualEndDate = new Date(yearUser, monthUser, dayUser) <= new Date(yearEnd, monthEnd, dayEnd);
-      // const isAfterOrEqualBeginDate = timeBegin <= timeUser;
-      // const isBeforeOrEqualEndDate = timeUser <= timeEnd;
 
       return isAfterOrEqualBeginDate && isBeforeOrEqualEndDate;
     });
   }
 
   if (inputRoleClinetValue === 'all') {
-    //
     data = data;
   } else {
     data = data.filter(item => item.isAdmin === isAdmiValid);
   }
 
-  // Kiểm tra nếu lọc ra không có dữ liệu thì thông báo
   if (data.length === 0) {
     alert('Không tìm thấy thông tin người dùng!');
   } else {
@@ -289,12 +261,8 @@ resetBtn.addEventListener('click', e => {
   paginationHandler();
 });
 
-// end: Logic for filter products
 
-// start: Apply layout user list
 const usersContainer = document.querySelector('.admin__content--body__users');
-// import DUMMY_DATA from '../../database/userData.js';
-// localStorage.setItem('ACCOUNT__DATA', JSON.stringify(DUMMY_DATA));
 
 const renderUsersInfo = userList => {
   userList = userList || JSON.parse(localStorage.getItem('accounts'));
@@ -302,9 +270,6 @@ const renderUsersInfo = userList => {
   usersContainer.innerHTML = '';
 
   userList?.forEach(user => {
-    // if (user.isAdmin) {
-    //   return;
-    // }
     const dateRegister = new Date(user.dateRegister);
 
     const day = dateRegister.getDate().toString().padStart(2, '0');
@@ -325,9 +290,7 @@ const renderUsersInfo = userList => {
     usersContainer.insertAdjacentHTML('afterbegin', html);
   });
 };
-// end: Apply layout user list
 
-// start: delete user
 const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 
@@ -392,7 +355,6 @@ const deleteUserHandler = btn => {
   data = data.filter(user => user.id !== currentUID);
   localStorage.setItem('accounts', JSON.stringify(data));
 
-  // Xóa tất cả đơn người dùng
   let userDummyApi = JSON.parse(localStorage.getItem('DUMMY_API'));
   userDummyApi = userDummyApi.filter(user => {
     if (user.idUser !== currentUID) {
@@ -417,7 +379,6 @@ const clickedDeleteBtnHandler = () => {
     });
   });
 };
-// end: delete user
 
 const init = data => {
   renderUsersInfo(data);
@@ -426,7 +387,6 @@ const init = data => {
 
 init();
 
-// start: pagination
 function paginationHandler() {
   const productItems = document.querySelectorAll('.admin__content--body__users ul');
   let currentPage = 0;
@@ -448,7 +408,6 @@ function paginationHandler() {
     storeItemsPerPage = [];
   }
 
-  // Checking on first page
   function renderPaginationBtn() {
     const pagination = document.querySelector('.pagination__user');
     pagination.innerHTML = '';
@@ -501,4 +460,3 @@ function paginationHandler() {
   renderPaginationBtn();
 }
 paginationHandler();
-// end: pagination
