@@ -57,18 +57,6 @@ function clickAddCart(id) {
   quantity = quantity + 1;
   toastContainer.style.display = 'flex';
   toastAddCart.style.display = 'flex';
-  var currentTime = new Date();
-  var ngay = currentTime.getDate();
-  var thang = currentTime.getMonth() + 1;
-  var nam = currentTime.getFullYear();
-  var gio = currentTime.getHours();
-  var phut = currentTime.getMinutes();
-  var giay = currentTime.getSeconds();
-  const processAt = {
-    id: id.textContent,
-    time: `${gio}:${phut}:${giay}`,
-    date: `${ngay}/${thang}/${nam} `
-  };
   const process = {
     id: id.textContent,
     quantity: quantity
@@ -87,7 +75,6 @@ function clickAddCart(id) {
     userLocal.cart.push(process);
     quantity = 1;
   }
-  userLocal.createCartAt.push(processAt);
   localStorage.setItem('User', JSON.stringify(userLocal));
   const itemCart = document.createElement('p');
   itemCart.classList.add('item-cart');
@@ -238,7 +225,6 @@ selectButton.forEach(e => {
 
 function filteredProducts() {
   const dropdownMenu = document.getElementById('dropdown-menu');
-  const confirmButton = document.getElementById('filter-confirm-button');
   const types = document.getElementById('types');
 
   dropdownMenu.querySelectorAll('input').forEach(element => {
@@ -388,22 +374,6 @@ document.getElementById('sidebar-confirm-button').addEventListener('click', func
   }
  
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 document.getElementById('filter-confirm-button').addEventListener('click', function () {
   const types = document.getElementById('types');
