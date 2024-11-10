@@ -917,7 +917,7 @@ const showModalOrderAdmin = (user, currentPID, cart, currentQNT) => {
         </ul>
       </div>
       <div class="modal__content--img">
-        <img src="${returnTruePathLink(productInfo.imgSrc)}" alt="Hình ảnh xe đạp">
+        <img src="${productInfo.imgSrc}" alt="Hình ảnh xe đạp">
       </div>
       <div class="modal__conent--total__amount">
         <h1>Tổng tiền</h1>

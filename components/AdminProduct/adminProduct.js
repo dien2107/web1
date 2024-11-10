@@ -1136,7 +1136,7 @@ function updateEvent(item, index, id, element) {
           idProductMessage.innerHTML = '* Vui lòng nhập mã sản phẩm';
           isValidIdProduct = false;
         } else if (
-          data.some(
+          dataAdminProduct.some(
             product => product.ID === formIdProductValue.trim() && currentIdProduct !== formIdProductValue.trim()
           )
         ) {
@@ -1169,7 +1169,7 @@ function updateEvent(item, index, id, element) {
           isValidIdProduct;
 
         if (isValidForm) {
-          data.forEach(product => {
+          dataAdminProduct.forEach(product => {
             if (product.ID === id) {
               let whatImgSrcIs;
 
@@ -1191,7 +1191,7 @@ function updateEvent(item, index, id, element) {
             }
           });
           localStorage.setItem('needReturnProductPage', JSON.stringify(true));
-          localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
+          localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(dataAdminProduct));
 
           alert('Cập nhật dữ liệu thành công!');
 
@@ -1231,9 +1231,9 @@ function updateEvent(item, index, id, element) {
       });
       confirmBtn.addEventListener('click', e => {
         const id = d.parentElement.querySelector('.id').innerText.trim();
-        data = data.filter(product => product.ID !== id);
+        dataAdminProduct = dataAdminProduct.filter(product => product.ID !== id);
         localStorage.setItem('needReturnProductPage', JSON.stringify(true));
-        localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
+        localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(dataAdminProduct));
 
         alert('Xóa sản phẩm thành công!');
 
@@ -1450,7 +1450,7 @@ addProductBtn.addEventListener('click', e => {
     if (id.value.trim().length === 0) {
       showMessageIdRes.innerHTML = '* Vui lòng nhập mã sản phẩm';
       isValidId = false;
-    } else if (data.some(product => product.ID === id.value.trim())) {
+    } else if (dataAdminProduct.some(product => product.ID === id.value.trim())) {
       showMessageIdRes.innerHTML = '* Mã sản phẩm đã tồn tại';
       isValidId = false;
     } else if (id.value.trim().length !== 5) {
@@ -1528,8 +1528,8 @@ addProductBtn.addEventListener('click', e => {
         dateUpdate: currentISOString
       };
 
-      data.push(newProduct);
-      localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(data));
+      dataAdminProduct.push(newProduct);
+      localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(dataAdminProduct));
 
       const manageProduct = document.getElementById('add-product-container');
       const pagination = document.getElementById('pagination');
@@ -1540,7 +1540,7 @@ addProductBtn.addEventListener('click', e => {
       pagination.style.display = 'flex';
       cancel.style.display = 'none';
       addProductBtn.style.display = 'block';
-      loadData(data);
+      loadData(dataAdminProduct);
 
       unhideFilterContent();
       alert('Đã thêm sản phẩm thành công!');
@@ -1560,7 +1560,7 @@ cancel.addEventListener('click', e => {
   pagination.style.display = 'flex';
   cancel.style.display = 'none';
   addProductBtn.style.display = 'block';
-  loadData(data);
+  loadData(dataAdminProduct);
 });
 
 
@@ -1661,7 +1661,7 @@ filterSubmitBtn.addEventListener('click', e => {
     return;
   }
 
-  let dataFilter = [...data];
+  let dataFilter = [...dataAdminProduct];
   if (dateFrom.value || dateTo.value || dateSelect.value !== '') {
     if ((dateFrom.value || dateTo.value) && !dateSelect.value) {
       alert('Vui lòng chọn dữ kiện loại ngày cần lọc!');
@@ -1758,9 +1758,9 @@ resetBtn.addEventListener('click', () => {
   productName.value = '';
   productCode.value = '';
   categorySelect.value = 'all';
-  filteredData = [...data];
+  filteredData = [...dataAdminProduct];
   generatePagination(filteredData);
-  loadData(data);
+  loadData(dataAdminProduct);
 });
 const autoReturnProductPageWhenReload = () => {
   const taskbarItems = document.querySelectorAll('.admin__taskbar--body__list li');
