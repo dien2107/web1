@@ -1,32 +1,32 @@
 const hideMenuBtn = document.querySelector('.header__bottom--hide-menu');
 const closeMenuBtn = document.querySelector('.hide__menu--close');
 const hideMenu = document.querySelector('.hide__menu');
-const overlay = document.querySelector('.overlay');
+const menuOverlay = document.querySelector('.overlay');
 
 hideMenuBtn.addEventListener('click', e => {
   hideMenu.classList.toggle('active');
-  overlay.classList.toggle('active__overlay');
+  menuOverlay.classList.toggle('active__overlay');
 });
 
 const closeMenu = () => {
   hideMenu.classList.remove('active');
-  overlay.classList.remove('active__overlay');
+  menuOverlay.classList.remove('active__overlay');
 };
 
 closeMenuBtn.addEventListener('click', e => {
   closeMenu();
 });
 
-overlay.addEventListener('click', e => {
+menuOverlay.addEventListener('click', e => {
   closeMenu();
 });
 
-const userBtn = document.querySelector('.hide__menu--list__extention .header__bottom--extention-user');
-const userWrapper = document.querySelector('.user__wrapper');
+const menuUserBtn = document.querySelector('.hide__menu--list__extention .header__bottom--extention-user');
+const menuUserWrapper = document.querySelector('.user__wrapper');
 const openFormRegister = () => {
-  userWrapper.classList.add('user__active');
-  userWrapper.classList.add('register__active');
-  overlay.classList.add('active__overlay');
+  menuUserWrapper.classList.add('user__active');
+  menuUserWrapper.classList.add('register__active');
+  menuOverlay.classList.add('active__overlay');
 };
 const catelogyBtn = document.querySelector('.hide__menu--list__extention .header__bottom--extention-cate');
 const hideMenuList = document.querySelector('.hide__menu--list__types');

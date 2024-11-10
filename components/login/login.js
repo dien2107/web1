@@ -1,374 +1,126 @@
 let isLoggedIn = false;
 const userBtn = document.querySelector('.header__bottom--extention-user');
-const overlay = document.querySelector('.overlay');
+const loginOverlay = document.querySelector('.overlay');
 const userWrapper = document.querySelector('.user__wrapper');
 
-const openFormRegister = () => {
-  if (!isLoggedIn) {
-    userWrapper.classList.add('user__active');
-    userWrapper.classList.add('register__active');
-    overlay.classList.add('active__overlay');
-  }
+const showOverlay = () => loginOverlay.classList.add('active__overlay');
+const hideOverlay = () => loginOverlay.classList.remove('active__overlay');
+
+const toggleUserForm = (formType) => {
+  userWrapper.classList.add('user__active', `${formType}__active`);
+  showOverlay();
 };
 
-userBtn.addEventListener('click', e => {
+userBtn.addEventListener('click', () => {
   checkLoggedIn();
-  openFormRegister();
+  if (!isLoggedIn) toggleUserForm('register');
 });
 
-const section4Btn = document.querySelector('.section--4 button');
-section4Btn.addEventListener('click', e => {
-  openFormRegister();
-});
+document.querySelector('.section--4 button').addEventListener('click', () => toggleUserForm('register'));
+document.querySelector('.register__background button').addEventListener('click', () => toggleUserForm('login'));
+document.querySelector('.login__background button').addEventListener('click', () => toggleUserForm('register'));
 
-const signinBtn = document.querySelector('.register__background button');
-
-signinBtn.addEventListener('click', e => {
-  userWrapper.classList.add('login__active');
-  userWrapper.classList.remove('register__active');
-});
-
-const signinBtnOnLowDevice = document.querySelector('.signin button');
-const registerAgainOnLowDevice = document.querySelector('.register__again button');
-
-signinBtnOnLowDevice.addEventListener('click', e => {
-  userWrapper.classList.add('login__active');
-  userWrapper.classList.remove('register__active');
-});
-
-registerAgainOnLowDevice.addEventListener('click', e => {
-  userWrapper.classList.remove('login__active');
-  userWrapper.classList.add('register__active');
-});
-
-const registerAgain = document.querySelector('.login__background button');
-registerAgain.addEventListener('click', e => {
-  userWrapper.classList.add('register__active');
-  userWrapper.classList.remove('login__active');
-});
-
-const userIconHideMenu = document.querySelector('.hide__menu--list__extention .header__bottom--extention-user');
-const hideMenu = document.querySelector('.hide__menu');
-
-userIconHideMenu.addEventListener('click', e => {
-  openFormRegister();
-});
-
-const hideFormRegLogin = () => {
+const handleCloseForm = () => {
   userWrapper.style.animation = `fade 0.5s ease-in`;
   setTimeout(() => {
-    overlay.classList.remove('active__overlay');
-    userWrapper.classList.remove('user__active');
-    userWrapper.classList.remove('register__active');
-    userWrapper.classList.remove('login__active');
+    hideOverlay();
+    userWrapper.classList.remove('user__active', 'register__active', 'login__active');
     userWrapper.style.animation = `bottomUp 1s ease-in-out`;
   }, 450);
 };
 
-overlay.addEventListener('click', e => {
-  hideFormRegLogin();
-});
+loginOverlay.addEventListener('click', handleCloseForm);
+document.querySelector('.user__wrapper .form__close--global').addEventListener('click', handleCloseForm);
 
-const btnCloseGlobal = document.querySelector('.user__wrapper .form__close--global');
-btnCloseGlobal.addEventListener('click', e => {
-  hideFormRegLogin();
-});
-
-const accounts = [
-  {
-    id: 'admin',
-    name: 'Quản lý viên 1',
-    email: 'admin',
-    password: 'admin',
-    dateRegister: '2023-01-01T00:00:00.000Z',
-    isAdmin: true,
-    cart: []
-  }
+const accounts = JSON.parse(localStorage.getItem('accounts')) || [
+  { id: 'admin', name: 'Admin', email: 'admin', password: 'admin', isAdmin: true, cart: [] }
 ];
+const DUMMY_API = JSON.parse(localStorage.getItem('DUMMY_API')) || accounts.map(account => ({ idUser: account.id, cart: [] }));
 
-let DUMMY_API = [];
+const saveDataToLocalStorage = () => {
+  localStorage.setItem('accounts', JSON.stringify(accounts));
+  localStorage.setItem('DUMMY_API', JSON.stringify(DUMMY_API));
+};
+
+const displayMessage = (element, message) => {
+  element.innerText = message;
+};
 
 const registerSubmitBtn = document.querySelector('.register__info--submit');
 const registerNameInput = document.querySelector('.register__info--input-name');
 const registerEmailInput = document.querySelector('.register__info--input-email');
 const registerPasswordInput = document.querySelector('.register__info--input-password');
 
-const showMessageNameRes = document.querySelector('.register__info--input__full-name p');
-const showMessageEmailRes = document.querySelector('.register__info--input__full-email p');
-const showMessagePasswordRes = document.querySelector('.register__info--input__full-password p');
-
-function generateRandomUserID(length) {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let userID = '';
-  const charactersLength = characters.length;
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * charactersLength);
-    userID += characters.charAt(randomIndex);
-  }
-
-  return userID;
-}
-
-registerSubmitBtn.addEventListener('click', e => {
+registerSubmitBtn.addEventListener('click', (e) => {
   e.preventDefault();
   const name = registerNameInput.value.trim();
   const email = registerEmailInput.value.trim();
   const password = registerPasswordInput.value.trim();
 
-  let isValidName = true;
-  let isValidEmail = true;
-  let isValidPassword = true;
+  const showMessageNameRes = document.querySelector('.register__info--input__full-name p');
+  const showMessageEmailRes = document.querySelector('.register__info--input__full-email p');
+  const showMessagePasswordRes = document.querySelector('.register__info--input__full-password p');
 
-  if (name.length === 0) {
-    showMessageNameRes.innerText = '* Bạn chưa nhập tên đầy đủ';
-    isValidName = false;
-  } else {
-    showMessageNameRes.innerText = '';
-  }
+  const isValidName = name.length > 0;
+  const isValidEmail = email.length > 0 && /@.*\.[a-zA-Z]{2,3}$/g.test(email) && !accounts.some(acc => acc.email === email);
+  const isValidPassword = password.length > 8;
 
-  const patternEmail = /@.*\.[a-zA-z]{2,3}$/gi;
+  displayMessage(showMessageNameRes, isValidName ? '' : '* Bạn chưa nhập tên đầy đủ');
+  displayMessage(showMessageEmailRes, isValidEmail ? '' : '* Email không hợp lệ hoặc đã tồn tại');
+  displayMessage(showMessagePasswordRes, isValidPassword ? '' : '* Mật khẩu phải trên 8 ký tự');
 
-  if (email.length === 0) {
-    showMessageEmailRes.innerText = '* Bạn chưa nhập email';
-    isValidEmail = false;
-  } else if (!patternEmail.test(email)) {
-    showMessageEmailRes.innerText = '* Email không hợp lệ';
-    isValidEmail = false;
-  } else {
-    if (accounts.length > 0) {
-      const isExist = accounts.find(account => account.email === email);
-      if (isExist) {
-        showMessageEmailRes.innerText = '* Email đã tồn tại';
-        isValidEmail = false;
-      } else {
-        showMessageEmailRes.innerText = '';
-      }
-    }
-  }
-
-  if (password.length === 0) {
-    showMessagePasswordRes.innerText = '* Bạn chưa nhập mật khẩu';
-    isValidPassword = false;
-  } else if (password.length <= 8) {
-    showMessagePasswordRes.innerText = '* Mật khẩu phải trên 8 ký tự';
-    isValidPassword = false;
-  } else {
-    showMessagePasswordRes.innerText = '';
-  }
-
-  const isValidRegister = isValidName && isValidEmail && isValidPassword;
-
-  if (isValidRegister) {
-    const date = new Date().toISOString();
-    const id = generateRandomUserID(5);
-    accounts.push({
-      id: id,
-      name: name,
-      email: email,
-      password: password,
-      dateRegister: date,
-      cart: [],
-      isAdmin: false
-    });
-
-    localStorage.setItem('accounts', JSON.stringify(accounts));
-
-    const isHasDummyAPI = JSON.parse(localStorage.getItem('DUMMY_API'));
-    if (!isHasDummyAPI) {
-      accounts.forEach(account => {
-        DUMMY_API.push({
-          idUser: account.id,
-          cart: []
-        });
-      });
-    } else {
-      DUMMY_API = isHasDummyAPI;
-      accounts.forEach(account => {
-        const isExistUserCart = DUMMY_API.find(userCart => account.id === userCart.idUser);
-        if (!isExistUserCart) {
-          DUMMY_API.push({
-            idUser: account.id,
-            cart: []
-          });
-        }
-      });
-    }
-
-    localStorage.setItem('DUMMY_API', JSON.stringify(DUMMY_API));
-
-    localStorage.setItem(
-      'User',
-      JSON.stringify({
-        id: id,
-        name: name,
-        email: email,
-        password: password,
-        dateRegister: date,
-        cart: [],
-        isAdmin: false
-      })
-    );
-
+  if (isValidName && isValidEmail && isValidPassword) {
+    const newAccount = { id: Date.now().toString(), name, email, password, dateRegister: new Date().toISOString(), isAdmin: false, cart: [] };
+    accounts.push(newAccount);
+    DUMMY_API.push({ idUser: newAccount.id, cart: [] });
+    saveDataToLocalStorage();
+    alert('Đăng ký thành công!');
     location.reload();
-
-    registerNameInput.value = '';
-    registerEmailInput.value = '';
-    registerPasswordInput.value = '';
-
-    checkLoggedIn();
   }
 });
-const getData = () => {
-  const dataFromLocalStorage = JSON.parse(localStorage.getItem('accounts'));
-
-  const uniqueId = [];
-  const filteredData = [];
-
-  if (dataFromLocalStorage) {
-    const updateData = [...accounts, ...dataFromLocalStorage];
-
-    updateData.forEach(user => {
-      if (!uniqueId.includes(user.id)) {
-        uniqueId.push(user.id);
-        filteredData.push(user);
-      }
-    });
-
-    accounts.length = 0;
-    accounts.push(...filteredData);
-  }
-};
-
-getData();
 
 const loginSubmitBtn = document.querySelector('.login__info--submit');
 const loginEmailInput = document.querySelector('.login__info--input-email');
 const loginPasswordInput = document.querySelector('.login__info--input-password');
 
-const showMessageEmailLog = document.querySelector('.login__info--input__full-email p');
-const showMessagePasswordLog = document.querySelector('.login__info--input__full-password p');
-
-loginSubmitBtn.addEventListener('click', e => {
+loginSubmitBtn.addEventListener('click', (e) => {
   e.preventDefault();
 
   const email = loginEmailInput.value.trim();
   const password = loginPasswordInput.value.trim();
 
-  let isValidEmail = true;
-  let isValidPassword = true;
+  const showMessageEmailLog = document.querySelector('.login__info--input__full-email p');
+  const showMessagePasswordLog = document.querySelector('.login__info--input__full-password p');
 
-  if (email.length === 0) {
-    showMessageEmailLog.innerText = '* Bạn chưa nhập email';
-    isValidEmail = false;
-  } else if (!email.includes('@') && email !== 'admin') {
-    showMessageEmailLog.innerText = '* Email không hợp lệ';
-    isValidEmail = false;
-  } else {
-    showMessageEmailLog.innerText = '';
-  }
+  const isValidEmail = email.length > 0 && (email.includes('@') || email === 'admin');
+  const isValidPassword = password.length > 8 || password === 'admin';
 
-  if (password.length === 0) {
-    showMessagePasswordLog.innerText = '* Bạn chưa nhập mật khẩu';
-    isValidPassword = false;
-  } else if (password.length <= 8 && password !== 'admin') {
-    showMessagePasswordLog.innerText = '* Mật khẩu phải trên 8 ký tự';
-    isValidPassword = false;
-  } else {
-    showMessagePasswordLog.innerText = '';
-  }
+  displayMessage(showMessageEmailLog, isValidEmail ? '' : '* Email không hợp lệ');
+  displayMessage(showMessagePasswordLog, isValidPassword ? '' : '* Mật khẩu không hợp lệ');
 
-  const isValidLogin = isValidEmail && isValidPassword;
-
-  if (isValidLogin) {
-    const findAccount = accounts.find(account => {
-      return account.email === email;
-    });
-
-    if (findAccount) {
-      if (findAccount.password === password) {
-        localStorage.setItem('User', JSON.stringify(findAccount));
-
-        const isHasDummyAPI = JSON.parse(localStorage.getItem('DUMMY_API'));
-        if (!isHasDummyAPI) {
-          accounts.forEach(account => {
-            DUMMY_API.push({
-              idUser: account.id,
-              cart: []
-            });
-          });
-          localStorage.setItem('DUMMY_API', JSON.stringify(DUMMY_API));
-        }
-
-        location.reload();
-
-        loginEmailInput.value = '';
-        loginPasswordInput.value = '';
-
-        checkLoggedIn();
-      } else {
-        showMessagePasswordLog.innerText = '* Bạn nhập sai mật khẩu';
-      }
+  if (isValidEmail && isValidPassword) {
+    const user = accounts.find(account => account.email === email && account.password === password);
+    if (user) {
+      localStorage.setItem('User', JSON.stringify(user));
+      location.reload();
     } else {
-      showMessageEmailLog.innerText = '* Email không tồn tại';
+      alert('Email hoặc mật khẩu không chính xác');
     }
   }
 });
 
-
-const welcomeUser = document.querySelector('.user-welcome');
-const userName = welcomeUser.querySelector('p:last-child');
-const userList = document.querySelector('.header__bottom--user__list');
-const section4 = document.querySelector('.section--4-container');
-
 const checkLoggedIn = () => {
   const userLogin = JSON.parse(localStorage.getItem('User'));
-  const userListOnLowDevice = document.querySelector('.hide__menu--user__list');
-  const userNameOnLowDevice = document.querySelector(
-    '.hide__menu--list__extention .header__bottom--extention-user span'
-  );
-
   if (userLogin) {
     isLoggedIn = true;
-    userName.innerText = userLogin.name;
-    userNameOnLowDevice.innerText = userLogin.name;
-    welcomeUser.classList.add('active');
-
-    userIconHideMenu.removeEventListener('click', openFormRegister);
-    userBtn.removeEventListener('click', openFormRegister);
-
-    userBtn.addEventListener('mouseover', e => {
-      userList.style.display = 'block';
-    });
-
-    userBtn.addEventListener('mouseout', e => {
-      userList.style.display = 'none';
-    });
-
-    section4.style.display = 'none';
-
-    userIconHideMenu.classList.add('active-down');
-    userIconHideMenu.addEventListener('click', e => {
-      userListOnLowDevice.classList.toggle('active__onHideMenu');
-      userIconHideMenu.classList.toggle('active-down');
-      userIconHideMenu.classList.toggle('active-up');
-    });
-
-    if (userLogin.isAdmin) {
-      document.querySelectorAll('.adminManager__item').forEach(item => (item.style.display = 'block'));
-    }
+    document.querySelector('.user-welcome p:last-child').innerText = userLogin.name;
+    document.querySelector('.section--4-container').style.display = 'none';
   } else {
-    userList.style.display = 'none';
-    userIconHideMenu.addEventListener('click', e => {
-      hideMenu.classList.remove('active');
-    });
+    document.querySelector('.header__bottom--user__list').style.display = 'none';
   }
 };
 
 checkLoggedIn();
-
-const logoutBtn = document.querySelector('.logout');
-const logoutLowDeviceBtn = document.querySelector('.hide__menu--list__type.logout__item');
 
 const logoutHandler = () => {
   localStorage.removeItem('User');
@@ -376,75 +128,14 @@ const logoutHandler = () => {
   location.reload();
 };
 
-logoutLowDeviceBtn.addEventListener('click', logoutHandler);
+document.querySelector('.logout').addEventListener('click', logoutHandler);
+document.querySelector('.hide__menu--list__type.logout__item').addEventListener('click', logoutHandler);
 
-logoutBtn.addEventListener('click', logoutHandler);
-
-const manageBtn = document.querySelector('.adminManager');
-const manageLowDeviceBtn = document.querySelector('.hide__menu--list__type.adminManager__item');
-
-manageLowDeviceBtn.addEventListener('click', e => {
-  window.location.href = '/html/page/admin/Home.html';
-});
-
-manageBtn.addEventListener('click', e => {
-  window.location.href = '/html/page/admin/Home.html';
-});
-
-const showEyeRegister = document.querySelector('.showEyeRegister');
-const hideEyeRegister = document.querySelector('.hideEyeRegister');
-
-showEyeRegister.addEventListener('click', e => {
+document.querySelector('.showEyeRegister').addEventListener('click', (e) => {
   e.preventDefault();
   registerPasswordInput.type = 'text';
-  showEyeRegister.classList.toggle('hide');
-  hideEyeRegister.classList.toggle('hide');
 });
-
-hideEyeRegister.addEventListener('click', e => {
+document.querySelector('.hideEyeRegister').addEventListener('click', (e) => {
   e.preventDefault();
   registerPasswordInput.type = 'password';
-  showEyeRegister.classList.toggle('hide');
-  hideEyeRegister.classList.toggle('hide');
 });
-
-const showEyeLogin = document.querySelector('.showEyeLogin');
-const hideEyeLogin = document.querySelector('.hideEyeLogin');
-
-showEyeLogin.addEventListener('click', e => {
-  e.preventDefault();
-  loginPasswordInput.type = 'text';
-  showEyeLogin.classList.toggle('hide');
-  hideEyeLogin.classList.toggle('hide');
-});
-
-hideEyeLogin.addEventListener('click', e => {
-  e.preventDefault();
-  loginPasswordInput.type = 'password';
-  showEyeLogin.classList.toggle('hide');
-  hideEyeLogin.classList.toggle('hide');
-});
-
-const cartIcon = document.querySelector('.header__bottom--extention-cart');
-const cartBtn = cartIcon.parentElement;
-const cartBtnLowDevice = document.querySelector('.hide__menu--list__extention .header__bottom--extention-cart');
-
-const userLogin = JSON.parse(localStorage.getItem('User'));
-
-const closeMenu = () => {
-  hideMenu.classList.remove('active');
-  overlay.classList.add('active__overlay');
-};
-
-if (!userLogin) {
-  cartBtn.addEventListener('click', e => {
-    e.preventDefault();
-    openFormRegister();
-  });
-
-  cartBtnLowDevice.addEventListener('click', e => {
-    e.preventDefault();
-    openFormRegister();
-    closeMenu();
-  });
-}

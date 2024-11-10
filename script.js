@@ -1,10 +1,3 @@
-import DUMMY_PRODUCTS from '../../database/products.js';
-
-let productsFromLocal = JSON.parse(localStorage.getItem('DUMMY_PRODUCTS'));
-
-if (!productsFromLocal) {
-  localStorage.setItem('DUMMY_PRODUCTS', JSON.stringify(DUMMY_PRODUCTS));
-}
 const experienceYear = document.querySelector('#experienceYear');
 const currentYear = new Date().getFullYear();
 experienceYear.querySelector('span').innerText = `${currentYear - 1976}`;
@@ -78,7 +71,7 @@ typeProductsNav.forEach(item =>
     const secondString = item.textContent.trim().substring(1).toLocaleLowerCase(); 
     const type = firstString + secondString;
 
-    localStorage.setItem('typeToFilter', JSON.stringify(type));
+    // localStorage.setItem('typeToFilter', JSON.stringify(type));
   })
 );
 const typeProductsSidebarMenu = document.querySelectorAll('.hide__menu--list__type');
@@ -88,7 +81,7 @@ typeProductsSidebarMenu.forEach(item =>
     const firstString = item.textContent.trim().charAt(0).toUpperCase();
     const secondString = item.textContent.trim().substring(1).toLocaleLowerCase(); 
     const type = firstString + secondString;
-    localStorage.setItem('typeToFilter', JSON.stringify(type));
+    // localStorage.setItem('typeToFilter', JSON.stringify(type));
   })
 );
 const isLogged = JSON.parse(localStorage.getItem('User'));
