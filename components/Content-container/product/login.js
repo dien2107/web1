@@ -67,7 +67,7 @@ logoutBtn.addEventListener('click', logoutHandler);
 const manageBtn = document.querySelector('.adminManager');
 
 manageBtn.addEventListener('click', e => {
-  window.location.href = '/html/page/admin/Home.html';
+  window.location.href = '/web1/html/page/admin/Home.html';
 });
 function openFormRegister() {
   if (!isLoggedIn) {

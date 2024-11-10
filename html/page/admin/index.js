@@ -18,9 +18,10 @@ toggleMenuIcon.addEventListener('click', e => {
 });
 
 // Xử lý click vào img thì về lại trang chủ
-logoMenu.addEventListener('click', e => {
-  window.location.href = window.location.origin + '/index.html';
-});
+
+// logoMenu.addEventListener('click', e => {
+//   window.location.href = window.location.origin + '/index.html';
+// });
 
 // Xử lý đăng xuất tài khoản
 const logoutBtnOnAdminPage = document.querySelector('.admin__taskbar--footer');
@@ -85,12 +86,12 @@ taskbarItems.forEach(item => {
   });
 });
 
-const init = () => {
+const initAdmin = () => {
   hideContents();
   homeContent.classList.remove('hideItem');
 };
 
-init();
+initAdmin();
 
 // Sét name admin UI cho page admin
 const nameUserAdmin = document.querySelector('.admin__content--header__user p strong');

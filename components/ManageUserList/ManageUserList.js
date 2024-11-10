@@ -254,8 +254,8 @@ submitBtn.addEventListener('click', e => {
   paginationHandler();
 });
 
-const resetBtn = document.querySelector('.user--reset__btn');
-resetBtn.addEventListener('click', e => {
+const resetBtnManagerUser = document.querySelector('.user--reset__btn');
+resetBtnManagerUser.addEventListener('click', e => {
   const data = JSON.parse(localStorage.getItem('accounts'));
   init(data);
   paginationHandler();
@@ -292,15 +292,15 @@ const renderUsersInfo = userList => {
 };
 
 const modal = document.querySelector('.modal');
-const overlay = document.querySelector('.overlay');
+const overlayManageUser = document.querySelector('.overlay');
 
-const showModal = () => {
+const showModalManageUser = () => {
   modal.classList.add('active');
-  overlay.classList.add('active');
+  overlayManageUser.classList.add('active');
 };
 
 const renderModalContent = () => {
-  showModal();
+  showModalManageUser();
   modal.innerHTML = '';
   const html = `
   <div class="modal--delete">
@@ -320,7 +320,7 @@ const renderModalContent = () => {
 
 const closeModal = () => {
   modal.classList.remove('active');
-  overlay.classList.remove('active');
+  overlayManageUser.classList.remove('active');
 };
 
 const showModalHandler = btn => {

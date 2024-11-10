@@ -1364,12 +1364,11 @@ function handleOnDelivery() {
             cartItem.classList.add('info-item-container');
 
             cartItem.innerHTML = `
-                          <td class="img"><img src="${returnPathImg(data[i])}" alt="${data[i].name}"></td>
+                          <td class="img"><img src="${dataCart[i].imgSrc}" alt="${dataCart[i].name}"></td>
                           <td class="name">
-                             
-                              ${data[i].name}
+                              ${dataCart[i].name}
                           </td>
-                          <td class="price">${data[i].price}</td>
+                          <td class="price">${dataCart[i].price}</td>
                           <td class="quantity">
                               <div class="quantity-item">
                                   
@@ -1379,7 +1378,7 @@ function handleOnDelivery() {
                           </td>
                           <td >
                               <div class="checkbox">
-                                  <p class="id">${data[i].ID}</p>
+                                  <p class="id">${dataCart[i].ID}</p>
                                   
       
                               </div>
@@ -1527,7 +1526,7 @@ logoutBtn.addEventListener('click', logoutHandler);
 const manageBtn = document.querySelector('.adminManager');
 
 manageBtn.addEventListener('click', e => {
-  window.location.href = '/html/page/admin/Home.html';
+  window.location.href = '/web1/html/page/admin/Home.html';
 });
 // =========================== end: GO TO ADMIN PAGE ===========================
 
@@ -1555,7 +1554,7 @@ userLowDeviceBtn.addEventListener('click', e => {
 const manageLowDeviceBtn = document.querySelector('.hide__menu--list__type.adminManager__item');
 
 manageLowDeviceBtn.addEventListener('click', e => {
-  window.location.href = '/html/page/admin/Home.html';
+  window.location.href = '/web1/html/page/admin/Home.html';
 });
 
 const logoutLowDeviceBtn = document.querySelector('.hide__menu--list__type.logout__item');

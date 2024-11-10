@@ -842,13 +842,13 @@ const productsList = [
 ];
 
 let userData = JSON.parse(localStorage.getItem('DUMMY_API'));
-const modal = document.querySelector('.modal');
-const overlay = document.querySelector('.overlay');
+const modalOrderAdmin = document.querySelector('.modal');
+const overlayOrderAdmin = document.querySelector('.overlay');
 
 
-const closeModal = () => {
-  modal.classList.remove('active');
-  overlay.classList.remove('active');
+const closeModalOrderAdmin = () => {
+  modalOrderAdmin.classList.remove('active');
+  overlayOrderAdmin.classList.remove('active');
 };
 
 function returnTruePathLink(img) {
@@ -859,13 +859,13 @@ function returnTruePathLink(img) {
   }
 }
 
-const showModal = (user, currentPID, cart, currentQNT) => {
-  const form = modal.querySelector('form');
+const showModalOrderAdmin = (user, currentPID, cart, currentQNT) => {
+  const form = modalOrderAdmin.querySelector('form');
 
   const productInfo = productsList.find(product => product.ID === currentPID);
   const price = parseFloat(productInfo.price.replace('VND', '').split('.').join(''));
 
-  modal.innerHTML = '';
+  modalOrderAdmin.innerHTML = '';
 
   if (form) {
     form.innerHTML = '';
@@ -932,12 +932,12 @@ const showModal = (user, currentPID, cart, currentQNT) => {
   </form>
     `;
 
-  modal.insertAdjacentHTML('afterbegin', html);
-  modal.classList.add('active');
-  overlay.classList.add('active');
+  modalOrderAdmin.insertAdjacentHTML('afterbegin', html);
+  modalOrderAdmin.classList.add('active');
+  overlayOrderAdmin.classList.add('active');
 };
 
-overlay.addEventListener('click', closeModal);
+overlayOrderAdmin.addEventListener('click', closeModalOrderAdmin);
 const listProducts = document.querySelector('.admin__content--body__products');
 
 const uiElement = (idUser, idOrder, day, month, year, quantity, productInfo, idProduct, isProcessed) => {
@@ -950,10 +950,10 @@ const uiElement = (idUser, idOrder, day, month, year, quantity, productInfo, idP
     <li class="admin__content--body__productId products--item__productId">${idProduct}</li>
     <li class="admin__content--body__img products--item__img">
       <div>
-        <img src="/${productInfo.imgSrc}" alt="Hình ảnh xe đạp" />
+        <img ${productInfo ? '' : 'style = " width: 85% " '};" src="${productInfo ? productInfo.imgSrc : "https://api.xedap.vn/wp-content/uploads/2022/06/jumper-red-edited.png"}" alt="Hình ảnh xe đạp" />
       </div>
     </li>
-    <li class="admin__content--body__name products--item__name">${productInfo.name}</li>
+    <li class="admin__content--body__name products--item__name">${productInfo ? productInfo.name : ""}</li>
     <li class="admin__content--body__qnt products--item__qnt" data-qnt=${quantity}>
       <p>${quantity}</p>
     </li>
@@ -1018,13 +1018,13 @@ const renderItems = (processed = false, processing = false, data = userData) => 
     }
   });
 };
-const submitBtn = document.querySelector('.order--filter__btn');
+const submitBtnOrderAdmin = document.querySelector('.order--filter__btn');
 
-let data;
+let dataOrderAdmin;
 
 let isProcessed;
 
-submitBtn.addEventListener('click', e => {
+submitBtnOrderAdmin.addEventListener('click', e => {
   e.preventDefault();
 
   const inputIdClientValue = document.querySelector('#orderIdClient input').value.trim();
@@ -1056,7 +1056,7 @@ submitBtn.addEventListener('click', e => {
     });
   }
 
-  data = userData;
+  dataOrderAdmin = userData;
 
   if (inputOrderDateBegin && inputOrderDateEnd) {
     const dayBegin = timeBegin.getDate();
@@ -1066,7 +1066,7 @@ submitBtn.addEventListener('click', e => {
     const dayEnd = timeEnd.getDate();
     const monthEnd = timeEnd.getMonth();
     const yearEnd = timeEnd.getFullYear();
-    data = data.filter(user => {
+    dataOrderAdmin = dataOrderAdmin.filter(user => {
       return user.cart.some(cart => {
         console.log;
         const timeOrder = new Date(cart.dateCreate);
@@ -1085,11 +1085,11 @@ submitBtn.addEventListener('click', e => {
     });
   }
   if (inputIdClientValue) {
-    data = data.filter(user => user.idUser === inputIdClientValue.trim());
+    dataOrderAdmin = dataOrderAdmin.filter(user => user.idUser === inputIdClientValue.trim());
   }
 
   if (inputIdOrderValue) {
-    data = data
+    dataOrderAdmin = dataOrderAdmin
       .map(user => ({
         idUser: user.idUser,
         cart: [user.cart.find(cart => cart.idOrder === inputIdOrderValue)]
@@ -1109,17 +1109,17 @@ submitBtn.addEventListener('click', e => {
 
   listProducts.innerHTML = '';
   if (isProcessed === 'processed') {
-    renderItems(true, false, data);
+    renderItems(true, false, dataOrderAdmin);
     clickIconHandler();
     clickIconInfoHandler();
     clickDeleteBtnHandler();
   } else if (isProcessed === 'processing') {
-    renderItems(false, true, data);
+    renderItems(false, true, dataOrderAdmin);
     clickIconHandler();
     clickIconInfoHandler();
     clickDeleteBtnHandler();
   } else if (isProcessed === 'all') {
-    renderItems(false, false, data);
+    renderItems(false, false, dataOrderAdmin);
     clickIconHandler();
     clickIconInfoHandler();
     clickDeleteBtnHandler();
@@ -1130,9 +1130,9 @@ submitBtn.addEventListener('click', e => {
   paginationHandler();
 });
 
-const resetBtn = document.querySelector('.order--reset__btn');
-resetBtn.addEventListener('click', e => {
-  init();
+const resetBtnOrderAdmin = document.querySelector('.order--reset__btn');
+resetBtnOrderAdmin.addEventListener('click', e => {
+  initOrderAdmin();
   paginationHandler();
 });
 const updateProcessingHandler = (user, currentPID, currentOID) => {
@@ -1152,7 +1152,7 @@ const clickedExitBtnHandler = () => {
   const exitBtn = document.querySelector('.modal__action--exit');
   exitBtn.addEventListener('click', e => {
     e.preventDefault();
-    closeModal();
+    closeModalOrderAdmin();
   });
 };
 
@@ -1161,8 +1161,8 @@ const clickedProcessBtnHandler = (user, currentPID, currentOID) => {
   processBtn.addEventListener('click', e => {
     e.preventDefault();
     updateProcessingHandler(user, currentPID, currentOID);
-    closeModal();
-    init();
+    closeModalOrderAdmin();
+    initOrderAdmin();
     paginationHandler();
     localStorage.setItem('isNeedReloadPageAdmin', JSON.stringify(true));
 
@@ -1175,7 +1175,7 @@ const updateLocalStorageForProcessHandler = (currentUID, currentPID, currentOID,
     if (user.idUser === currentUID) {
       user.cart.forEach(cart => {
         if (cart.idOrder === currentOID) {
-          showModal(user, currentPID, cart, currentQNT);
+          showModalOrderAdmin(user, currentPID, cart, currentQNT);
           clickedProcessBtnHandler(user, currentPID, currentOID);
           clickedExitBtnHandler();
         }
@@ -1214,7 +1214,7 @@ const clickIconInfoHandler = () => {
         if (user.idUser === currentUID) {
           user.cart.forEach(cart => {
             if (cart.idOrder === currentOID) {
-              showModal(user, currentPID, cart, currentQNT);
+              showModalOrderAdmin(user, currentPID, cart, currentQNT);
               clickedExitBtnHandler();
               document.querySelector('.modal__action--process').style.display = 'none';
             }
@@ -1239,16 +1239,16 @@ const deleteProduct = (currentUID, currentPID, currentOID, isNonActiveItem) => {
 };
 
 function updateLocalStorageForDeleteHandler() {
-  init();
+  initOrderAdmin();
   paginationHandler();
   localStorage.setItem('DUMMY_API', JSON.stringify(userData));
 }
 
-const renderModalContent = () => {
-  modal.innerHTML = '';
+const renderModalContentOrderAdmin = () => {
+  modalOrderAdmin.innerHTML = '';
 
-  modal.classList.add('active');
-  overlay.classList.add('active');
+  modalOrderAdmin.classList.add('active');
+  overlayOrderAdmin.classList.add('active');
 
   const html = `
   <div class="modal--delete">
@@ -1263,7 +1263,7 @@ const renderModalContent = () => {
       <button class="modal--delete__footer--exit">Không</button>
     </div>
   </div>`;
-  modal.insertAdjacentHTML('afterbegin', html);
+  modalOrderAdmin.insertAdjacentHTML('afterbegin', html);
 };
 
 function clickDeleteBtnHandler() {
@@ -1277,7 +1277,7 @@ function clickDeleteBtnHandler() {
 
     deleteBtnElements.forEach(btn => {
       btn.addEventListener('click', e => {
-        renderModalContent();
+        renderModalContentOrderAdmin();
 
         const acpDeleteBtn = document.querySelector('.modal--delete__footer--delete');
         const exitDeleteBtn = document.querySelector('.modal--delete__footer--exit');
@@ -1285,11 +1285,11 @@ function clickDeleteBtnHandler() {
         acpDeleteBtn.addEventListener('click', e => {
           deleteProduct(currentUID, currentPID, currentOID, isNonActiveItem);
           updateLocalStorageForDeleteHandler();
-          closeModal();
+          closeModalOrderAdmin();
         });
 
         exitDeleteBtn.addEventListener('click', e => {
-          closeModal();
+          closeModalOrderAdmin();
         });
       });
     });
@@ -1322,7 +1322,7 @@ const sortProductsNonActiveFirst = () => {
   });
 };
 
-const init = () => {
+const initOrderAdmin = () => {
   renderItems();
   clickIconHandler();
   clickIconInfoHandler();
@@ -1331,7 +1331,7 @@ const init = () => {
   renderImgTruePath();
 };
 
-init();
+initOrderAdmin();
 
 function paginationHandler() {
   const productItems = document.querySelectorAll('.admin__content--body__products ul');
