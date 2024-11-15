@@ -69,6 +69,7 @@ const manageBtn = document.querySelector('.adminManager');
 manageBtn.addEventListener('click', e => {
   window.location.href = '/web1/html/page/admin/Home.html';
 });
+
 function openFormRegister() {
   if (!isLoggedIn) {
     userWrapper.classList.add('user__active');

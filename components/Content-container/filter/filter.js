@@ -993,7 +993,7 @@ function displayItem(startIndex, endIndex, data) {
                          <div class="overlay-hover">
                          
                         <div class="top-button">                  
-                            <i class="fa-solid fa-cart-plus" id="add-cart"></i>                        
+                            <i class="fa-solid fa-copyright" id="add-cart"></i>                        
                         </div>
                         <div class="overlay-click">
                         
